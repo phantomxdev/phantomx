@@ -90,6 +90,19 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x1263371e91334a3ac4729b1f2580d779f671c3650c5782264260c03aa86dfce1"));
 
         vSeeds.push_back(CDNSSeedData("sd1", "78.109.28.154"));
+		vSeeds.push_back(CDNSSeedData("sd2", "45.78.82.217"));
+		vSeeds.push_back(CDNSSeedData("sd3", "185.209.23.116"));
+		vSeeds.push_back(CDNSSeedData("sd4", "212.90.61.64"));
+		vSeeds.push_back(CDNSSeedData("sd5", "188.166.79.213"));
+		vSeeds.push_back(CDNSSeedData("sd6", "207.154.236.138"));
+		vSeeds.push_back(CDNSSeedData("sd7", "190.102.61.209"));
+		vSeeds.push_back(CDNSSeedData("sd8", "45.77.111.190"));
+		vSeeds.push_back(CDNSSeedData("sd9", "31.214.141.64"));
+		vSeeds.push_back(CDNSSeedData("sd10", "89.36.208.103"));
+		vSeeds.push_back(CDNSSeedData("sd11", "45.32.223.68"));
+		vSeeds.push_back(CDNSSeedData("sd12", "93.153.100.106"));
+		vSeeds.push_back(CDNSSeedData("sd13", "178.35.149.236"));
+		vSeeds.push_back(CDNSSeedData("sd14", "134.225.227.59"));
 
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,55);

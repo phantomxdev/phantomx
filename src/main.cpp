@@ -1174,13 +1174,13 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees, int nHeight)
 {
     int64_t nSubsidy = 2 * COIN;
 
-    if(pindexBest->nHeight < 100000)
+    if(pindexBest->nHeight < 50000)
     {
         nSubsidy = 5 * COIN;
     }
         else
     {
-        nSubsidy = 2 * COIN;
+        nSubsidy = 50 * COIN;
     }
 
 
