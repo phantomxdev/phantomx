@@ -1,7 +1,7 @@
 # phantomx-cryptocurrency
 phantomx cryptocurrency, a blockchain based digital money
-
-
+* Website : https://phantomx.co/
+* Twitter : https://twitter.com/PhantomX_Coin
 
 
 
