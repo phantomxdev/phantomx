@@ -43,6 +43,7 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
+        <file alias="masternode">res/icons/masternode.png</file>
         <file alias="onion">res/icons/onion.png</file>
         <file alias="onionblack">res/icons/onion-black.png</file>
     </qresource>
@@ -61,6 +62,7 @@
         <file alias="lock_open">res/icons/black/lock_open.png</file>
         <file alias="staking_off">res/icons/black/staking_off.png</file>
         <file alias="staking_on">res/icons/black/staking_on.png</file>
+        <file alias="masternode">res/icons/black/masternode.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>

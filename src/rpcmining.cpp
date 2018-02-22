@@ -11,8 +11,9 @@
 #include "init.h"
 #include "miner.h"
 #include "kernel.h"
-
+#include "util.h"
 #include <boost/assign/list_of.hpp>
+
 
 using namespace json_spirit;
 using namespace std;

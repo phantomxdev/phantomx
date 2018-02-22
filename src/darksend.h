@@ -292,7 +292,7 @@ public:
 
     void InitCollateralAddress(){
         std::string strAddress = "";
-            strAddress = "AW6ak6DXZFfCRwYQ7H68sE1HJbruLLdUTA";
+            strAddress = "PEYQrAgJ8vqyeUXKgwi575xqWhMb3PnMUb";
         SetCollateralAddress(strAddress);
     }
 
@@ -359,7 +359,7 @@ public:
 
     int GetMaxPoolTransactions()
     {
-        
+
         //use the production amount
         return POOL_MAX_TRANSACTIONS;
     }

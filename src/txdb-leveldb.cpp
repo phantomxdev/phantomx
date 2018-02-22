@@ -28,7 +28,7 @@ leveldb::DB *txdb; // global pointer for LevelDB object instance
 
 static leveldb::Options GetOptions() {
     leveldb::Options options;
-    int nCacheSizeMB = GetArg("-dbcache", 25);
+    int nCacheSizeMB = GetArg("-dbcache", 100);
     options.block_cache = leveldb::NewLRUCache(nCacheSizeMB * 1048576);
     options.filter_policy = leveldb::NewBloomFilterPolicy(10);
     return options;
@@ -207,7 +207,7 @@ bool CTxDB::WriteAddrIndex(uint160 addrHash, uint256 txHash)
     }
     else
     {
-	if(std::find(txHashes.begin(), txHashes.end(), txHash) == txHashes.end()) 
+	if(std::find(txHashes.begin(), txHashes.end(), txHash) == txHashes.end())
     	{
     	    txHashes.push_back(txHash);
             return Write(make_pair(string("adr"), addrHash), txHashes);
@@ -449,7 +449,7 @@ bool CTxDB::LoadBlockIndex()
     LogPrintf("LoadBlockIndex(): hashBestChain=%s  height=%d  trust=%s  date=%s\n",
       hashBestChain.ToString(), nBestHeight, CBigNum(nBestChainTrust).ToString(),
       DateTimeStrFormat("%x %H:%M:%S", pindexBest->GetBlockTime()));
-  
+
     /*// NovaCoin: load hashSyncCheckpoint
     if (!ReadSyncCheckpoint(Checkpoints::hashSyncCheckpoint))
         return error("CTxDB::LoadBlockIndex() : hashSyncCheckpoint not loaded");

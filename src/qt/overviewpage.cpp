@@ -128,10 +128,12 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->listTransactions->setMinimumWidth(350);
 
     connect(ui->listTransactions, SIGNAL(clicked(QModelIndex)), this, SLOT(handleTransactionClicked(QModelIndex)));
+    ui->listTransactions->update();
 
     // init "out of sync" warning labels
     ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
+
 
     showingDarkSendMessage = 0;
     darksendActionCheck = 0;
@@ -256,7 +258,8 @@ void OverviewPage::updateDisplayUnit()
     if(walletModel && walletModel->getOptionsModel())
     {
         if(currentBalance != -1)
-            setBalance(currentBalance, walletModel->getStake(), currentUnconfirmedBalance, currentImmatureBalance, currentAnonymizedBalance);
+            setBalance(currentBalance, walletModel->getStake(), currentUnconfirmedBalance, currentImmatureBalance,
+                       currentAnonymizedBalance);
 
         // Update txdelegate->unit with the current unit
         txdelegate->unit = walletModel->getOptionsModel()->getDisplayUnit();
@@ -265,10 +268,17 @@ void OverviewPage::updateDisplayUnit()
     }
 }
 
+
+
 void OverviewPage::updateAlerts(const QString &warnings)
 {
     this->ui->labelAlerts->setVisible(!warnings.isEmpty());
     this->ui->labelAlerts->setText(warnings);
+}
+
+bool OverviewPage::getOutOfSyncWarning(void)
+{
+	return this->is_out_of_sync;
 }
 
 void OverviewPage::showOutOfSyncWarning(bool fShow)
@@ -283,7 +293,7 @@ void OverviewPage::updateDarksendProgress()
 {
     qDebug() << "updateDarksendProgress()";
     if(IsInitialBlockDownload()) return;
-    
+
     qDebug() << "updateDarksendProgress() getbalance";
     int64_t nBalance = pwalletMain->GetBalance();
     if(nBalance == 0)

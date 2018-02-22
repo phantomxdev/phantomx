@@ -70,7 +70,7 @@ Value getinfo(const Array& params, bool fHelp)
     obj.push_back(Pair("paytxfee",      ValueFromAmount(nTransactionFee)));
     obj.push_back(Pair("mininput",      ValueFromAmount(nMinimumInputValue)));
     if (pwalletMain && pwalletMain->IsCrypted())
-        obj.push_back(Pair("unlocked_until", (int64_t)nWalletUnlockTime));
+        obj.push_back(Pair("unlocked_until", EpochToDateTimeStrFormat((int64_t)nWalletUnlockTime)));
 #endif
     obj.push_back(Pair("errors",        GetWarnings("statusbar")));
     return obj;

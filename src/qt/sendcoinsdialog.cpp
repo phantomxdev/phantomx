@@ -36,7 +36,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
-    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a phantomx address (e.g. CKPnZKDzaDXqEgKJ4GdUg58gXxgzA7mkny)"));
+    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a PhantomX address (e.g. CKPnZKDzaDXqEgKJ4GdUg58gXxgzA7mkny)"));
 #endif
 
     addEntry();
@@ -161,7 +161,9 @@ void SendCoinsDialog::on_sendButton_clicked()
         return;
     }
 
+
     WalletModel::UnlockContext ctx(model->requestUnlock());
+
     if(!ctx.isValid())
     {
         // Unlock wallet was cancelled
@@ -217,6 +219,11 @@ void SendCoinsDialog::on_sendButton_clicked()
     case WalletModel::NarrationTooLong:
         QMessageBox::warning(this, tr("Send Coins"),
             tr("Error: Narration is too long."),
+            QMessageBox::Ok, QMessageBox::Ok);
+        break;
+    case WalletModel::AnonymizeOnlyUnlocked:
+        QMessageBox::warning(this, tr("Send Coins"),
+            tr("Error: Unlock your wallet before to send PhantomX."),
             QMessageBox::Ok, QMessageBox::Ok);
         break;
     case WalletModel::Aborted: // User aborted, nothing to do
@@ -474,7 +481,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString & text)
             {
                 CPubKey pubkey;
                 CKeyID keyid;
-                CBitcoinAddress(text.toStdString()).GetKeyID(keyid);   
+                CBitcoinAddress(text.toStdString()).GetKeyID(keyid);
                 if (model->getPubKey(keyid, pubkey))
                     ui->labelCoinControlChangeLabel->setText(tr("(no label)"));
                 else

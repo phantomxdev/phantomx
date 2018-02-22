@@ -32,13 +32,13 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="btnMNUpdateList">
        <property name="currentIndex">
         <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>phantomxNodes Network</string>
+         <string>PNX Network</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
@@ -72,7 +72,7 @@
            </column>
            <column>
             <property name="text">
-             <string>Active (secs)</string>
+             <string>Active Seen</string>
             </property>
            </column>
            <column>
@@ -93,9 +93,19 @@
             <number>0</number>
            </property>
            <item>
+            <widget class="QPushButton" name="updateMNListButton">
+             <property name="toolTip">
+              <string>Update Masternodes List</string>
+             </property>
+             <property name="text">
+              <string>Update List</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>phantomxNodes Node Count:</string>
+              <string>PhantomX Node Count:</string>
              </property>
             </widget>
            </item>
@@ -125,7 +135,7 @@
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>My phantomxNodes</string>
+         <string>My Masternodes</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
@@ -188,7 +198,7 @@
              </column>
              <column>
               <property name="text">
-               <string>IP/Onion</string>
+               <string>IP Address</string>
               </property>
              </column>
              <column>
@@ -198,7 +208,7 @@
              </column>
              <column>
               <property name="text">
-               <string>Collateral Address</string>
+               <string>PNX Collateral Address</string>
               </property>
              </column>
             </widget>

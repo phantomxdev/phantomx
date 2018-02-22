@@ -88,9 +88,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     prevBlocks(0),
     nWeight(0)
 {
-    //resize(970, 570);
-	resize(1080, 662);
-    setWindowTitle(tr("phantomx") + " - " + tr("Wallet"));
+    resize(1080, 662);
+    setWindowTitle(tr("PhantomX") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
     setWindowIcon(QIcon(":icons/bitcoin"));
@@ -102,6 +101,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     setStyleSheet("#phantomx { background-color: #f9f9f9);  }"
     "QMenu          { background: rgb(30,32,36); color: rgb(222,222,222); }"
     "QMenu::item:selected { background-color: rgb(48,140,198); }");
+
+
     // Accept D&D of URIs
     setAcceptDrops(true);
 
@@ -119,7 +120,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Create tabs
     overviewPage = new OverviewPage();
-   
+
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     transactionView = new TransactionView(this);
@@ -136,7 +137,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     masternodeManagerPage = new MasternodeManager(this);
     messagePage = new MessagePage(this);
-    
+
     centralStackedWidget = new QStackedWidget(this);
     centralStackedWidget->setContentsMargins(0, 0, 0, 0);
     centralStackedWidget->addWidget(overviewPage);
@@ -165,7 +166,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     QWidget *frameBlocks = new QWidget();
     frameBlocks->setContentsMargins(0,0,0,0);
     frameBlocks->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    frameBlocks->setStyleSheet("QWidget { background: none; margin-bottom: 5px; }");
+    frameBlocks->setStyleSheet("QWidget { background: none; border: 0px solid none; margin-bottom: 5px; }");
     QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
     frameBlocksLayout->setContentsMargins(3,0,3,0);
     frameBlocksLayout->setSpacing(3);
@@ -185,15 +186,21 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     frameBlocksLayout->addStretch();
 
     frameBlocksLayout->addStretch();
-    
+
 
     if (GetBoolArg("-staking", true))
     {
         QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
         connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingIcon()));
-        timerStakingIcon->start(20 * 1000);
+        timerStakingIcon->start(30000);// 30 segundos
         updateStakingIcon();
+    } else if (GetBoolArg("-masternode", true)) {
+        QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
+        connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateMasternodeIcon()));
+        timerStakingIcon->start(30000);// 30 segundos
+        updateMasternodeIcon();
     }
+
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
@@ -218,7 +225,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     statusBar()->addWidget(progressBar);
     statusBar()->addPermanentWidget(frameBlocks);
     statusBar()->setObjectName("statusBar");
-    statusBar()->setStyleSheet("#statusBar { color: #101010; background-color: #f9f9f9);  }");
+    statusBar()->setStyleSheet("#statusBar { color: #ffffff; background-color: qradialgradient(cx: -0.8, cy: 0, fx: -0.8, fy: 0, radius: 0.6, stop: 0 #101010, stop: 1 #404040);  }" );
+
 
     syncIconMovie = new QMovie(fUseBlackTheme ? ":/movies/update_spinner_black" : ":/movies/update_spinner", "mng", this);
 
@@ -268,7 +276,7 @@ void BitcoinGUI::createActions()
     tabGroup->addAction(receiveCoinsAction);
 
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
-    sendCoinsAction->setToolTip(tr("Send coins to a phantomx address"));
+    sendCoinsAction->setToolTip(tr("Send coins to a PhantomX address"));
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(sendCoinsAction);
@@ -285,8 +293,8 @@ void BitcoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
-    masternodeManagerAction = new QAction(QIcon(":/icons/bitcoin"), tr("&phantomxNodes"), this);
-    masternodeManagerAction->setToolTip(tr("Show phantomxNodes Nodes status and configure your nodes."));
+    masternodeManagerAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Masternodes"), this);
+    masternodeManagerAction->setToolTip(tr("Show PhantomX Nodes status and configure your nodes."));
     masternodeManagerAction->setCheckable(true);
     tabGroup->addAction(masternodeManagerAction);
 
@@ -314,14 +322,14 @@ void BitcoinGUI::createActions()
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(tr("&About phantomx"), this);
-    aboutAction->setToolTip(tr("Show information about phantomx"));
+    aboutAction = new QAction(tr("&About PhantomX"), this);
+    aboutAction->setToolTip(tr("Show information about PhantomX"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(tr("About &Qt"), this);
     aboutQtAction->setToolTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(tr("&Options..."), this);
-    optionsAction->setToolTip(tr("Modify configuration options for phantomx"));
+    optionsAction->setToolTip(tr("Modify configuration options for PhantomX"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(tr("&Encrypt Wallet..."), this);
@@ -402,7 +410,8 @@ void BitcoinGUI::createToolBars()
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setContextMenuPolicy(Qt::PreventContextMenu);
     toolbar->setObjectName("tabs");
-    toolbar->setStyleSheet("QToolButton { color: #101010; } QToolButton:hover { background-color: ##e0373f } QToolButton:checked { background-color: #c51f26 } QToolButton:pressed { background-color: none } #tabs { color: #101010; background-color: #f9f9f9);  }");
+    // toolbar->setStyleSheet("QToolButton { color: #101010; } QToolButton:hover { background-color: ##e0373f } QToolButton:checked { background-color: #c51f26 } QToolButton:pressed { background-color: none } #tabs { color: #101010; background-color: #f9f9f9);  }");
+    toolbar->setStyleSheet("#tabs { background-color: #f9f9f9; } ");
 
     QLabel* header = new QLabel();
     header->setMinimumSize(128, 128);
@@ -446,7 +455,7 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
 #endif
             if(trayIcon)
             {
-                trayIcon->setToolTip(tr("phantomx client") + QString(" ") + tr("[testnet]"));
+                trayIcon->setToolTip(tr("PhantomX client") + QString(" ") + tr("[testnet]"));
                 trayIcon->setIcon(QIcon(":/icons/toolbar_testnet"));
                 toggleHideAction->setIcon(QIcon(":/icons/toolbar_testnet"));
             }
@@ -521,7 +530,7 @@ void BitcoinGUI::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIconMenu = new QMenu(this);
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip(tr("phantomx client"));
+    trayIcon->setToolTip(tr("PhantomX client"));
     trayIcon->setIcon(QIcon(":/icons/toolbar"));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -591,7 +600,7 @@ void BitcoinGUI::setNumConnections(int count)
     default: icon = fUseBlackTheme ? ":/icons/black/connect_4" : ":/icons/connect_4"; break;
     }
     labelConnectionsIcon->setPixmap(QIcon(icon).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to phantomx network", "", count));
+    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to PhantomX network", "", count));
 }
 
 void BitcoinGUI::setNumBlocks(int count)
@@ -649,7 +658,7 @@ void BitcoinGUI::setNumBlocks(int count)
         progressBar->setMaximum(totalSecs);
         progressBar->setValue(totalSecs - secs);
         progressBar->setVisible(true);
-        
+
         tooltip = tr("Catching up...") + QString("<br>") + tooltip;
         labelBlocksIcon->setMovie(syncIconMovie);
         if(count != prevBlocks)
@@ -676,7 +685,7 @@ void BitcoinGUI::setNumBlocks(int count)
 
 void BitcoinGUI::message(const QString &title, const QString &message, bool modal, unsigned int style)
 {
-    QString strTitle = tr("phantomx") + " - ";
+    QString strTitle = tr("PhantomX") + " - ";
     // Default to information icon
     int nMBoxIcon = QMessageBox::Information;
     int nNotifyIcon = Notificator::Information;
@@ -950,7 +959,7 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
         if (nValidUrisFound)
             gotoSendCoinsPage();
         else
-            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid phantomx address or malformed URI parameters."));
+            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PhantomX address or malformed URI parameters."));
     }
 
     event->acceptProposedAction();
@@ -965,7 +974,7 @@ void BitcoinGUI::handleURI(QString strURI)
         gotoSendCoinsPage();
     }
     else
-        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid phantomx address or malformed URI parameters."));
+        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PhantomX address or malformed URI parameters."));
 }
 
 void BitcoinGUI::setEncryptionStatus(int status)
@@ -978,7 +987,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(true);
         lockWalletAction->setVisible(true);
         encryptWalletAction->setEnabled(false);
-        
+
     }
     else
     {
@@ -1108,6 +1117,21 @@ void BitcoinGUI::updateWeight()
         return;
 
     nWeight = pwalletMain->GetStakeWeight();
+}
+
+void BitcoinGUI::updateMasternodeIcon()
+{
+    labelStakingIcon->setPixmap(QIcon(fUseBlackTheme ? ":/icons/black/masternode" : ":/icons/masternode").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+
+    if (pwalletMain && pwalletMain->IsLocked())
+        labelStakingIcon->setToolTip(tr("Not working because wallet is locked"));
+    else if (vNodes.empty())
+        labelStakingIcon->setToolTip(tr("Not working because wallet is offline"));
+    else if (IsInitialBlockDownload())
+        labelStakingIcon->setToolTip(tr("Not working because wallet is syncing"));
+    else
+        labelStakingIcon->setToolTip(tr("Masternode is ready"));
+
 }
 
 void BitcoinGUI::updateStakingIcon()

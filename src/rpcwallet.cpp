@@ -108,7 +108,7 @@ Value getnewaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getnewaddress [account]\n"
-            "Returns a new phantomx address for receiving payments.  "
+            "Returns a new PhantomX address for receiving payments.  "
             "If [account] is specified, it is added to the address book "
             "so payments received with the address will be credited to [account].");
 
@@ -175,7 +175,7 @@ Value getaccountaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "getaccountaddress <account>\n"
-            "Returns the current phantomx address for receiving payments to this account.");
+            "Returns the current PhantomX address for receiving payments to this account.");
 
     // Parse the account first so we don't generate a key if there's an error
     string strAccount = AccountFromValue(params[0]);
@@ -193,12 +193,12 @@ Value setaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount <phantomxaddress> <account>\n"
+            "setaccount <PhantomX Address> <account>\n"
             "Sets the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid phantomx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PhantomX address");
 
 
     string strAccount;
@@ -223,12 +223,12 @@ Value getaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount <phantomxaddress>\n"
+            "getaccount <PhantomX Address>\n"
             "Returns the account associated with the given address.");
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid phantomx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PhantomX address");
 
     string strAccount;
     map<CTxDestination, string>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
@@ -263,13 +263,13 @@ Value sendtoaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 5)
         throw runtime_error(
-            "sendtoaddress <phantomxaddress> <amount> [comment] [comment-to] [narration]\n"
+            "sendtoaddress <PhantomX Address> <amount> [comment] [comment-to] [narration]\n"
             "<amount> is a real and is rounded to the nearest 0.000001"
             + HelpRequiringPassphrase());
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid phantomx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PhantomX address");
 
     // Amount
     int64_t nAmount = AmountFromValue(params[1]);
@@ -277,7 +277,7 @@ Value sendtoaddress(const Array& params, bool fHelp)
     std::string sNarr;
     if (params.size() > 4 && params[4].type() != null_type && !params[4].get_str().empty())
         sNarr = params[4].get_str();
-    
+
     if (sNarr.length() > 24)
         throw runtime_error("Narration must be 24 characters or less.");
 
@@ -333,7 +333,7 @@ Value signmessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "signmessage <phantomxaddress> <message>\n"
+            "signmessage <PhantomX Address> <message>\n"
             "Sign a message with the private key of an address");
 
     EnsureWalletIsUnlocked();
@@ -368,14 +368,14 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress <phantomxaddress> [minconf=1]\n"
-            "Returns the total amount received by <phantomxaddress> in transactions with at least [minconf] confirmations.");
+            "getreceivedbyaddress <PhantomX Address> [minconf=1]\n"
+            "Returns the total amount received by <PhantomX Address> in transactions with at least [minconf] confirmations.");
 
     // Bitcoin address
     CBitcoinAddress address = CBitcoinAddress(params[0].get_str());
     CScript scriptPubKey;
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid phantomx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PhantomX address");
     scriptPubKey.SetDestination(address.Get());
     if (!IsMine(*pwalletMain,scriptPubKey))
         return (double)0.0;
@@ -596,14 +596,14 @@ Value sendfrom(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 7)
         throw runtime_error(
-            "sendfrom <fromaccount> <tophantomxaddress> <amount> [minconf=1] [comment] [comment-to] [narration]\n"
+            "sendfrom <fromaccount> <toPhantomX Address> <amount> [minconf=1] [comment] [comment-to] [narration]\n"
             "<amount> is a real and is rounded to the nearest 0.000001"
             + HelpRequiringPassphrase());
 
     string strAccount = AccountFromValue(params[0]);
     CBitcoinAddress address(params[1].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid phantomx address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PhantomX address");
     int64_t nAmount = AmountFromValue(params[2]);
 
     int nMinDepth = 1;
@@ -615,7 +615,7 @@ Value sendfrom(const Array& params, bool fHelp)
     std::string sNarr;
     if (params.size() > 6 && params[6].type() != null_type && !params[6].get_str().empty())
         sNarr = params[6].get_str();
-    
+
     if (sNarr.length() > 24)
         throw runtime_error("Narration must be 24 characters or less.");
 
@@ -667,7 +667,7 @@ Value sendmany(const Array& params, bool fHelp)
     {
         CBitcoinAddress address(s.name_);
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid phantomx address: ")+s.name_);
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid PhantomX address: ")+s.name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+s.name_);
@@ -713,7 +713,7 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     {
         string msg = "addmultisigaddress <nrequired> <'[\"key\",\"key\"]'> [account]\n"
             "Add a nrequired-to-sign multisignature address to the wallet\"\n"
-            "each key is a phantomx address or hex-encoded public key\n"
+            "each key is a PhantomX address or hex-encoded public key\n"
             "If [account] is specified, assign address to [account].";
         throw runtime_error(msg);
     }
@@ -1356,6 +1356,8 @@ Value walletpassphrase(const Array& params, bool fHelp)
     pwalletMain->TopUpKeyPool();
 
     int64_t nSleepTime = params[1].get_int64();
+    if(nSleepTime==0)
+       nSleepTime=9999999;
     LOCK(cs_nWalletUnlockTime);
     nWalletUnlockTime = GetTime() + nSleepTime;
     RPCRunLater("lockwallet", boost::bind(LockWallet, pwalletMain), nSleepTime);
@@ -1455,7 +1457,7 @@ Value encryptwallet(const Array& params, bool fHelp)
     // slack space in .dat files; that is bad if the old data is
     // unencrypted private keys. So:
     StartShutdown();
-    return "wallet encrypted; phantomx server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
+    return "wallet encrypted; PhantomX server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
 }
 
 
@@ -1569,7 +1571,7 @@ Value makekeypair(const Array& params, bool fHelp)
     string strPrefix = "";
     if (params.size() > 0)
         strPrefix = params[0].get_str();
- 
+
     CKey key;
     key.MakeNewKey(false);
 
@@ -1599,23 +1601,23 @@ Value getnewstealthaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getnewstealthaddress [label]\n"
-            "Returns a new phantomx stealth address for receiving payments anonymously.  ");
-    
+            "Returns a new PhantomX stealth address for receiving payments anonymously.  ");
+
     if (pwalletMain->IsLocked())
         throw runtime_error("Failed: Wallet must be unlocked.");
-    
+
     std::string sLabel;
     if (params.size() > 0)
         sLabel = params[0].get_str();
-    
+
     CStealthAddress sxAddr;
     std::string sError;
     if (!pwalletMain->NewStealthAddress(sError, sLabel, sxAddr))
         throw runtime_error(std::string("Could get new stealth address: ") + sError);
-    
+
     if (!pwalletMain->AddStealthAddress(sxAddr))
         throw runtime_error("Could not save to wallet.");
-    
+
     return sxAddr.Encoded();
 }
 
@@ -1625,27 +1627,27 @@ Value liststealthaddresses(const Array& params, bool fHelp)
         throw runtime_error(
             "liststealthaddresses [show_secrets=0]\n"
             "List owned stealth addresses.");
-    
+
     bool fShowSecrets = false;
-    
+
     if (params.size() > 0)
     {
         std::string str = params[0].get_str();
-        
+
         if (str == "0" || str == "n" || str == "no" || str == "-" || str == "false")
             fShowSecrets = false;
         else
             fShowSecrets = true;
     };
-    
+
     if (fShowSecrets)
     {
         if (pwalletMain->IsLocked())
             throw runtime_error("Failed: Wallet must be unlocked.");
     };
-    
+
     Object result;
-    
+
     //std::set<CStealthAddress>::iterator it;
     //for (it = pwalletMain->stealthAddresses.begin(); it != pwalletMain->stealthAddresses.end(); ++it)
     BOOST_FOREACH(CStealthAddress sit, pwalletMain->stealthAddresses)
@@ -1653,7 +1655,7 @@ Value liststealthaddresses(const Array& params, bool fHelp)
 	CStealthAddress* it = &(sit);
         if (it->scan_secret.size() < 1)
             continue; // stealth address is not owned
-        
+
         if (fShowSecrets)
         {
             Object objA;
@@ -1667,7 +1669,7 @@ Value liststealthaddresses(const Array& params, bool fHelp)
             result.push_back(Pair("Stealth Address", it->Encoded() + " - " + it->label));
         };
     };
-    
+
     return result;
 }
 
@@ -1677,20 +1679,20 @@ Value importstealthaddress(const Array& params, bool fHelp)
         throw runtime_error(
             "importstealthaddress <scan_secret> <spend_secret> [label]\n"
             "Import an owned stealth addresses.");
-    
+
     std::string sScanSecret  = params[0].get_str();
     std::string sSpendSecret = params[1].get_str();
     std::string sLabel;
-    
-    
+
+
     if (params.size() > 2)
     {
         sLabel = params[2].get_str();
     };
-    
+
     std::vector<uint8_t> vchScanSecret;
     std::vector<uint8_t> vchSpendSecret;
-    
+
     if (IsHex(sScanSecret))
     {
         vchScanSecret = ParseHex(sScanSecret);
@@ -1699,7 +1701,7 @@ Value importstealthaddress(const Array& params, bool fHelp)
         if (!DecodeBase58(sScanSecret, vchScanSecret))
             throw runtime_error("Could not decode scan secret as hex or base58.");
     };
-    
+
     if (IsHex(sSpendSecret))
     {
         vchSpendSecret = ParseHex(sSpendSecret);
@@ -1708,35 +1710,35 @@ Value importstealthaddress(const Array& params, bool fHelp)
         if (!DecodeBase58(sSpendSecret, vchSpendSecret))
             throw runtime_error("Could not decode spend secret as hex or base58.");
     };
-    
+
     if (vchScanSecret.size() != 32)
         throw runtime_error("Scan secret is not 32 bytes.");
     if (vchSpendSecret.size() != 32)
         throw runtime_error("Spend secret is not 32 bytes.");
-    
-    
+
+
     ec_secret scan_secret;
     ec_secret spend_secret;
-    
+
     memcpy(&scan_secret.e[0], &vchScanSecret[0], 32);
     memcpy(&spend_secret.e[0], &vchSpendSecret[0], 32);
-    
+
     ec_point scan_pubkey, spend_pubkey;
     if (SecretToPublicKey(scan_secret, scan_pubkey) != 0)
         throw runtime_error("Could not get scan public key.");
-    
+
     if (SecretToPublicKey(spend_secret, spend_pubkey) != 0)
         throw runtime_error("Could not get spend public key.");
-    
-    
+
+
     CStealthAddress sxAddr;
     sxAddr.label = sLabel;
     sxAddr.scan_pubkey = scan_pubkey;
     sxAddr.spend_pubkey = spend_pubkey;
-    
+
     sxAddr.scan_secret = vchScanSecret;
     sxAddr.spend_secret = vchSpendSecret;
-    
+
     Object result;
     bool fFound = false;
     // -- find if address already exists
@@ -1755,12 +1757,12 @@ Value importstealthaddress(const Array& params, bool fHelp)
                 fFound = true; // update stealth address with secrets
                 break;
             };
-            
+
             result.push_back(Pair("result", "Import failed - stealth address exists."));
             return result;
         };
     };
-    
+
     if (fFound)
     {
         result.push_back(Pair("result", "Success, updated " + sxAddr.Encoded()));
@@ -1769,11 +1771,11 @@ Value importstealthaddress(const Array& params, bool fHelp)
         pwalletMain->stealthAddresses.insert(sxAddr);
         result.push_back(Pair("result", "Success, imported " + sxAddr.Encoded()));
     };
-    
-    
+
+
     if (!pwalletMain->AddStealthAddress(sxAddr))
         throw runtime_error("Could not save to wallet.");
-    
+
     return result;
 }
 
@@ -1785,44 +1787,44 @@ Value sendtostealthaddress(const Array& params, bool fHelp)
             "sendtostealthaddress <stealth_address> <amount> [comment] [comment-to] [narration]\n"
             "<amount> is a real and is rounded to the nearest 0.000001"
             + HelpRequiringPassphrase());
-    
+
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
-    
+
     std::string sEncoded = params[0].get_str();
     int64_t nAmount = AmountFromValue(params[1]);
-    
+
     std::string sNarr;
     if (params.size() > 4 && params[4].type() != null_type && !params[4].get_str().empty())
         sNarr = params[4].get_str();
-    
+
     if (sNarr.length() > 24)
         throw runtime_error("Narration must be 24 characters or less.");
-    
+
     CStealthAddress sxAddr;
     Object result;
-    
+
     if (!sxAddr.SetEncoded(sEncoded))
     {
-        result.push_back(Pair("result", "Invalid phantomx stealth address."));
+        result.push_back(Pair("result", "Invalid PhantomX stealth address."));
         return result;
     };
-    
-    
+
+
     CWalletTx wtx;
     if (params.size() > 2 && params[2].type() != null_type && !params[2].get_str().empty())
         wtx.mapValue["comment"] = params[2].get_str();
     if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
         wtx.mapValue["to"]      = params[3].get_str();
-    
+
     std::string sError;
     if (!pwalletMain->SendStealthMoneyToDestination(sxAddr, nAmount, sNarr, wtx, sError))
         throw JSONRPCError(RPC_WALLET_ERROR, sError);
 
     return wtx.GetHash().GetHex();
-    
+
     result.push_back(Pair("result", "Not implemented yet."));
-    
+
     return result;
 }
 
@@ -1832,17 +1834,17 @@ Value scanforalltxns(const Array& params, bool fHelp)
         throw runtime_error(
             "scanforalltxns [fromHeight]\n"
             "Scan blockchain for owned transactions.");
-    
+
     Object result;
     int32_t nFromHeight = 0;
-    
+
     CBlockIndex *pindex = pindexGenesisBlock;
-    
-    
+
+
     if (params.size() > 0)
         nFromHeight = params[0].get_int();
-    
-    
+
+
     if (nFromHeight > 0)
     {
         pindex = mapBlockIndex[hashBestChain];
@@ -1850,21 +1852,21 @@ Value scanforalltxns(const Array& params, bool fHelp)
             && pindex->pprev)
             pindex = pindex->pprev;
     };
-    
+
     if (pindex == NULL)
         throw runtime_error("Genesis Block is not set.");
-    
+
     {
         LOCK2(cs_main, pwalletMain->cs_wallet);
-        
+
         pwalletMain->MarkDirty();
-        
+
         pwalletMain->ScanForWalletTransactions(pindex, true);
         pwalletMain->ReacceptWalletTransactions();
     }
-    
+
     result.push_back(Pair("result", "Scan complete."));
-    
+
     return result;
 }
 
@@ -1874,19 +1876,19 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
         throw runtime_error(
             "scanforstealthtxns [fromHeight]\n"
             "Scan blockchain for owned stealth transactions.");
-    
+
     Object result;
     uint32_t nBlocks = 0;
     uint32_t nTransactions = 0;
     int32_t nFromHeight = 0;
-    
+
     CBlockIndex *pindex = pindexGenesisBlock;
-    
-    
+
+
     if (params.size() > 0)
         nFromHeight = params[0].get_int();
-    
-    
+
+
     if (nFromHeight > 0)
     {
         pindex = mapBlockIndex[hashBestChain];
@@ -1894,44 +1896,44 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
             && pindex->pprev)
             pindex = pindex->pprev;
     };
-    
+
     if (pindex == NULL)
         throw runtime_error("Genesis Block is not set.");
-    
+
     // -- locks in AddToWalletIfInvolvingMe
-    
+
     bool fUpdate = true; // todo: option?
-    
+
     pwalletMain->nStealth = 0;
     pwalletMain->nFoundStealth = 0;
-    
+
     while (pindex)
     {
         nBlocks++;
         CBlock block;
         block.ReadFromDisk(pindex, true);
-        
+
         BOOST_FOREACH(CTransaction& tx, block.vtx)
         {
-            
+
             nTransactions++;
-            
+
             pwalletMain->AddToWalletIfInvolvingMe(tx, &block, fUpdate);
         };
-        
+
         pindex = pindex->pnext;
     };
-    
+
     printf("Scanned %u blocks, %u transactions\n", nBlocks, nTransactions);
     printf("Found %u stealth transactions in blockchain.\n", pwalletMain->nStealth);
     printf("Found %u new owned stealth transactions.\n", pwalletMain->nFoundStealth);
-    
+
     char cbuf[256];
     snprintf(cbuf, sizeof(cbuf), "%u new stealth transactions.", pwalletMain->nFoundStealth);
-    
+
     result.push_back(Pair("result", "Scan complete."));
     result.push_back(Pair("found", std::string(cbuf)));
-    
+
     return result;
 }
 
