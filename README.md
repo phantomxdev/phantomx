@@ -16,13 +16,13 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
 
 ### Technical details
 
- **System Protocol:** Proof-of-Work and Proof-of-Stake
- **Hash Algorithm:** X11
- **Currency symbols:** PNX
- **Market Cap:** 50 millions
- **Block Time:** 120 seconds
- **Masternode Collateral:** 20.000 PNX
- **Masternode Rewards:** 50% from PoS
+ **System Protocol:** Proof-of-Work and Proof-of-Stake<br>
+ **Hash Algorithm:** X11<br>
+ **Currency symbols:** PNX<br>
+ **Market Cap:** 50 millions<br>
+ **Block Time:** 120 seconds<br>
+ **Masternode Collateral:** 20.000 PNX<br>
+ **Masternode Rewards:** 50% from PoS<br>
 
 
 
@@ -52,31 +52,45 @@ git clone https://github.com/phantomxdev/phantomx.git phantomx
 cd phantomx
 ```
 
-Changing permission to run
+Changing permission and compiling LevelDB
 ```sh
 cd ./src/leveldb
 chmod +x build_detect_platform
+make libleveldb.a libmemenv.a
+cd ../..
+```
+
+Changing permission and compiling SECP256K1
+```sh
+cd ./src/secp256k1
+chmod +x autogen.sh
+./autogen.sh
+./configure
+make
 cd ../..
 ```
 
 Compiling daemon
 ```sh
+cd ./src
 make -f makefile.unix
+  or
+make -f makefile.unix "USE_UPNP=-" # without support to UPNP
 ```
 
 
 ### Technical guides for more detail
 
- **Masternode on Windows:** https://phantomx.co/guide/how-to-create-masternode-windows
- **Masternode on Linux:** https://phantomx.co/guide/how-to-create-masternode-linux
+ **Masternode on Windows:** https://phantomx.co/guide/how-to-create-masternode-windows<br>
+ **Masternode on Linux:** https://phantomx.co/guide/how-to-create-masternode-linux<br>
  **Updating blockchain:** https://phantomx.co/guide/how-to-update-blockchain
 
 
 
 ### Contacts
- **Website:** https://www.phantomx.co
- **Telegram:** https://t.me/joinchat/GuzdQUN9fdpX3fSJ4bqWTQ
- **Discord:** https://discord.gg/JU7jwZX
- **Twitter:** https://twitter.com/PhantomX_Coin
+ **Website:** https://www.phantomx.co<br>
+ **Telegram:** https://t.me/joinchat/GuzdQUN9fdpX3fSJ4bqWTQ<br>
+ **Discord:** https://discord.gg/JU7jwZX<br>
+ **Twitter:** https://twitter.com/PhantomX_Coin<br>
  **ANN BitCoinTalk:** https://bitcointalk.org/index.php?topic=2251352.msg22765424.0
 
