@@ -2,6 +2,7 @@
 
 PhantomX is a secure project aims to integrate cryptocurrencies in a real environment.
 
+<br><br>
 
 ### Why invest in PhaNtomX
 
@@ -11,7 +12,7 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
 
 > **GROWING COMMUNITY:** PhantomX has a growing and friendly community. We have many plans and developments for the introduction of the coin into real life. We are open for cooperation and everyone can participate and contribute to the improvement of the dissemination PhantomX.
 
-
+<br><br>
 
 ### Technical details
 
@@ -24,6 +25,8 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
  **Masternode Rewards:** 50% from PoS<br>
  **RPC Port: 31978**<br>
 
+<br><br>
+
 ### How to use PNX wallet
 
 > Windows System must to use compiled Windows wallet version from "release" github tab (has graphical interface). Users only need to run the downloaded ".exe" file and start using our wallet
@@ -31,6 +34,7 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
 > Linux System, has two method for run PNX wallet, using a graphical interface like on Windows version by downloading the suitable version from "release" github tab or by compiling the wallet and using without graphical interface, that option needs to compile the wallet but it's the recommended one for VPS staking and Masternodes which need to run 24/7 h.
 To compile the wallet we can choose between two method, the first "Method 1" is a autoinstall script that will compile the wallet for you and make a fast sync to the pnx blockchain. The second one called as "Method 2" consist of enter command by command on a terminal prompt
 
+<br><br>
 
  ### **Method 1.) Install the PNX wallet using the autoinstall script (Ubuntu/Debian/Raspberry)**
 
@@ -45,7 +49,7 @@ To compile the wallet we can choose between two method, the first "Method 1" is 
 
  Now the script will auto start to compile and to download the latest blockchain<br><br>
 
-
+<br>
 
  ### To run the wallet & other useful info:
 
@@ -62,11 +66,13 @@ To compile the wallet we can choose between two method, the first "Method 1" is 
      /wallets/phantomx/phantomxd  -datadir=/wallets/phantomx/wallet getinfo
 
 
+<br>
+
  ### A video tutorial using that autoinstall script can be watched at:
 
      TUTO Youtube : https://youtu.be/4oo4CqRBMh8
 
-
+<br><br>
 
 ### **Method 2.) Install PNX wallet from a terminal prompt**
 
@@ -91,16 +97,21 @@ First of all we need to install PNX Wallet, so install prerequisites:
     sudo chmod 600 /var/swap.1
     sudo /sbin/swapon /var/swap.1
 
+<br>
+
 Eddit /etc/fstab
 (ONLY RUN THIS COMMAND IF YOU HAVE LESS THAN 2GB RAM)
 
     sudo nano /etc/fstab
+
+<br>
 
 Add the line above on the end of /etc/fstab:
 (ONLY RUN THIS COMMAND IF YOU HAVE LESS THAN 2GB RAM)
 
     /var/swap.1 swap swap defaults 0 0
 
+<br>
 
 Compile the PNX wallet
 
@@ -125,6 +136,7 @@ Compile the PNX wallet
       or
     sudo make -f makefile.unix "USE_UPNP=-" # without support to UPNP
 
+<br>
 
 Copy the compiled file to a known folder
 
@@ -163,7 +175,7 @@ Start the wallet
 
     /wallets/phantomx/phantomxd -datadir=/wallets/phantomx/wallet -daemon -start
 
-
+<br><br>
 
 ### Technical guides for more detail
 
