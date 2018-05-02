@@ -212,6 +212,7 @@ private slots:
 
     void updateWeight();
     void updateStakingIcon();
+    void updateMasternodeIcon();
 
     /** called by a timer to check if fRequestShutdown has been set **/
     void detectShutdown();

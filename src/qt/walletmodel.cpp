@@ -145,13 +145,13 @@ void WalletModel::updateAddressBook(const QString &address, const QString &label
 bool WalletModel::validateAddress(const QString &address)
 {
     std::string sAddr = address.toStdString();
-    
+
     if (sAddr.length() > 75)
     {
         if (IsStealthAddress(sAddr))
             return true;
     };
-    
+
     CBitcoinAddress addressParsed(sAddr);
     return addressParsed.IsValid();
 }
@@ -215,7 +215,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
         foreach(const SendCoinsRecipient &rcp, recipients)
         {
             std::string sAddr = rcp.address.toStdString();
-            
+
             if (rcp.typeInd == AddressTableModel::AT_Stealth)
             {
                 CStealthAddress sxAddr;
@@ -225,87 +225,87 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
                     ec_secret secretShared;
                     ec_point pkSendTo;
                     ec_point ephem_pubkey;
-                    
-                    
+
+
                     if (GenerateRandomSecret(ephem_secret) != 0)
                     {
                         printf("GenerateRandomSecret failed.\n");
                         return Aborted;
                     };
-                    
+
                     if (StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
                     {
                         printf("Could not generate receiving public key.\n");
                         return Aborted;
                     };
-                    
+
                     CPubKey cpkTo(pkSendTo);
                     if (!cpkTo.IsValid())
                     {
                         printf("Invalid public key generated.\n");
                         return Aborted;
                     };
-                    
+
                     CKeyID ckidTo = cpkTo.GetID();
-                    
+
                     CBitcoinAddress addrTo(ckidTo);
-                    
+
                     if (SecretToPublicKey(ephem_secret, ephem_pubkey) != 0)
                     {
                         printf("Could not generate ephem public key.\n");
                         return Aborted;
                     };
-                    
+
                     if (fDebug)
                     {
-                        printf("Stealth send to generated pubkey %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+                        printf("Stealth send to generated pubkey %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
                         printf("hash %s\n", addrTo.ToString().c_str());
-                        printf("ephem_pubkey %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
+                        printf("ephem_pubkey %" PRIszu" : %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
                     };
-                    
+
                     CScript scriptPubKey;
                     scriptPubKey.SetDestination(addrTo.Get());
-                    
+
                     vecSend.push_back(make_pair(scriptPubKey, rcp.amount));
-                    
+
                     CScript scriptP = CScript() << OP_RETURN << ephem_pubkey;
-                    
+
                     if (rcp.narration.length() > 0)
                     {
                         std::string sNarr = rcp.narration.toStdString();
-                        
+
                         if (sNarr.length() > 24)
                         {
                             printf("Narration is too long.\n");
                             return NarrationTooLong;
                         };
-                        
+
                         std::vector<unsigned char> vchNarr;
-                        
+
                         SecMsgCrypter crypter;
                         crypter.SetKey(&secretShared.e[0], &ephem_pubkey[0]);
-                        
+
                         if (!crypter.Encrypt((uint8_t*)&sNarr[0], sNarr.length(), vchNarr))
                         {
                             printf("Narration encryption failed.\n");
                             return Aborted;
                         };
-                        
+
                         if (vchNarr.size() > 48)
                         {
                             printf("Encrypted narration is too long.\n");
                             return Aborted;
                         };
-                        
+
                         if (vchNarr.size() > 0)
                             scriptP = scriptP << OP_RETURN << vchNarr;
-                        
+
                         int pos = vecSend.size()-1;
                         mapStealthNarr[pos] = sNarr;
                     };
-                    
+
                     vecSend.push_back(make_pair(scriptP, 1));
-                    
+
 
                     continue;
                 }
@@ -315,33 +315,33 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
 		    return Aborted;
 		} // else drop through to normal
             }
-           
+
             CScript scriptPubKey;
             scriptPubKey.SetDestination(CBitcoinAddress(sAddr).Get());
             vecSend.push_back(make_pair(scriptPubKey, rcp.amount));
-   	            
-            
-            
-            
+
+
+
+
             if (rcp.narration.length() > 0)
             {
                 std::string sNarr = rcp.narration.toStdString();
-                
+
                 if (sNarr.length() > 24)
                 {
                     printf("Narration is too long.\n");
                     return NarrationTooLong;
                 };
-                
+
                 std::vector<uint8_t> vNarr(sNarr.c_str(), sNarr.c_str() + sNarr.length());
                 std::vector<uint8_t> vNDesc;
-                
+
                 vNDesc.resize(2);
                 vNDesc[0] = 'n';
                 vNDesc[1] = 'p';
-                
+
                 CScript scriptN = CScript() << OP_RETURN << vNDesc << OP_RETURN << vNarr;
-                
+
                 vecSend.push_back(make_pair(scriptN, 1));
             }
         }
@@ -366,7 +366,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
             int pos = it->first;
             if (nChangePos > -1 && it->first >= nChangePos)
                 pos++;
-            
+
             char key[64];
             if (snprintf(key, sizeof(key), "n_%u", pos) < 1)
             {
@@ -410,7 +410,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
             } else
             {
                 std::map<CTxDestination, std::string>::iterator mi = wallet->mapAddressBook.find(dest);
-                
+
                 // Check if we have a new address or an updated label
                 if (mi == wallet->mapAddressBook.end() || mi->second != strLabel)
                 {
@@ -571,7 +571,7 @@ void WalletModel::unsubscribeFromCoreSignals()
 WalletModel::UnlockContext WalletModel::requestUnlock()
 {
     bool was_locked = getEncryptionStatus() == Locked;
-    
+
     if ((!was_locked) && fWalletUnlockStakingOnly && isAnonymizeOnlyUnlocked())
     {
        setWalletLocked(true);
@@ -613,7 +613,7 @@ void WalletModel::UnlockContext::CopyFrom(const UnlockContext& rhs)
 
 bool WalletModel::getPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const
 {
-    return wallet->GetPubKey(address, vchPubKeyOut);   
+    return wallet->GetPubKey(address, vchPubKeyOut);
 }
 
 // returns a list of COutputs from COutPoints
@@ -630,7 +630,7 @@ void WalletModel::getOutputs(const std::vector<COutPoint>& vOutpoints, std::vect
     }
 }
 
-// AvailableCoins + LockedCoins grouped by wallet address (put change in one group with wallet address) 
+// AvailableCoins + LockedCoins grouped by wallet address (put change in one group with wallet address)
 void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) const
 {
     LOCK2(cs_main, wallet->cs_wallet); // ListLockedCoins, mapWallet

@@ -3,6 +3,7 @@
 
 #include "util.h"
 #include "sync.h"
+#include "darksend.h"
 
 #include <QWidget>
 #include <QTimer>
@@ -24,15 +25,18 @@ class MasternodeManager : public QWidget
 
 public:
     explicit MasternodeManager(QWidget *parent = 0);
+    //CService service;
     ~MasternodeManager();
 
     void setClientModel(ClientModel *clientModel);
     void setWalletModel(WalletModel *walletModel);
+    std::string status_mn;
+
 
 
 public slots:
     void updateNodeList();
-    void updateAdrenalineNode(QString alias, QString addr, QString privkey, QString collateral);
+    void updateAdrenalineNode(QString alias, QString addr, QString privkey, QString collateral, QString status);
 
 signals:
 
@@ -56,6 +60,8 @@ private slots:
     void on_stopAllButton_clicked();
     void on_removeButton_clicked();
     void on_tableWidget_2_itemSelectionChanged();
+    void on_updateMNListButton_clicked();
+    void updateMYNodeList();
 };
 
 #endif // MASTERNODEMANAGER_H

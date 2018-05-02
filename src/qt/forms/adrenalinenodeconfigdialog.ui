@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>phantomxNodes Node Configuration Template</string>
+   <string>PhantomX Node Configuration Template</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

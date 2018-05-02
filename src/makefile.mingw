@@ -6,14 +6,14 @@ USE_UPNP:=0
 USE_WALLET:=1
 
 INCLUDEPATHS= \
- -I"C:\boost-1.50.0-mgw" \
- -I"C:\db-4.8.30.NC-mgw\build_unix" \
- -I"C:\openssl-1.0.1c-mgw\include"
+ -I"C:\PhantomXCode\libswin\boost_1_66_0" \
+ -I"C:\PhantomXCode\libswin\db-4.8.30\build_unix" \
+ -I"C:\PhantomXCode\libswin\openssl-1.0.2n\include"
 
 LIBPATHS= \
- -L"C:\boost-1.50.0-mgw\stage\lib" \
- -L"C:\db-4.8.30.NC-mgw\build_unix" \
- -L"C:\openssl-1.0.1c-mgw"
+ -L"C:\PhantomXCode\libswin\boost_1_66_0\lib" \
+ -L"C:\PhantomXCode\libswin\db-4.8.30\build_unix" \
+ -L"C:\PhantomXCode\libswin\openssl-1.0.2n"
 
 LIBS= \
  -l boost_system-mgw44-mt-1_53 \
@@ -36,8 +36,8 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
- INCLUDEPATHS += -I"C:\miniupnpc-1.6-mgw"
- LIBPATHS += -L"C:\miniupnpc-1.6-mgw"
+ INCLUDEPATHS += -I"C:\PhantomXCode\libswin\miniupnpc-2.0"
+ LIBPATHS += -L"C:\PhantomXCode\libswin\miniupnpc-2.0"
  LIBS += -l miniupnpc -l iphlpapi
  DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif

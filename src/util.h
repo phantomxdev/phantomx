@@ -143,6 +143,7 @@ extern bool fCommandLine;
 extern std::string strMiscWarning;
 extern bool fNoListen;
 extern bool fLogTimestamps;
+extern bool fMasternodeSoftLock;
 extern volatile bool fReopenDebugLog;
 
 void RandAddSeed();
@@ -255,7 +256,7 @@ void runCommand(std::string strCommand);
 bool ParseInt32(const std::string& str, int32_t *out);
 
 
-/** 
+/**
  * Format a paragraph of text to a fixed width, adding spaces for
  * indentation to any added line.
  */
@@ -372,6 +373,7 @@ inline int64_t GetTimeMicros()
 }
 
 std::string DateTimeStrFormat(const char* pszFormat, int64_t nTime);
+std::string EpochToDateTimeStrFormat(int64_t nTime);
 
 static const std::string strTimestampFormat = "%Y-%m-%d %H:%M:%S UTC";
 inline std::string DateTimeStrFormat(int64_t nTime)

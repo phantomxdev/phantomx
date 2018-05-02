@@ -14,7 +14,7 @@
    <string>Send Messages</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#SendMessagesDialog { background-color: #383838; }</string>
+   <string notr="true">#SendMessagesDialog {  }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
    <property name="bottomMargin">

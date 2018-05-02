@@ -57,15 +57,15 @@ public:
         TransactionCommitFailed,
         NarrationTooLong,
         Aborted,
-	AnonymizeOnlyUnlocked
+	      AnonymizeOnlyUnlocked
     };
 
     enum EncryptionStatus
     {
         Unencrypted,  // !wallet->IsCrypted()
         Locked,       // wallet->IsCrypted() && wallet->IsLocked()
-        Unlocked,      // wallet->IsCrypted() && !wallet->IsLocked()
-	UnlockedForAnonymizationOnly
+        Unlocked,     // wallet->IsCrypted() && !wallet->IsLocked()
+	      UnlockedForAnonymizationOnly
     };
 
     OptionsModel *getOptionsModel();

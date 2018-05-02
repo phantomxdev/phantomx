@@ -141,6 +141,8 @@ class CTxDB;
 class CTxIndex;
 class CWalletInterface;
 
+/** MasterNode required collateral */
+inline int64_t MasternodeCollateral(int nHeight) { return 20000; } // 20K PNX required as collateral
 /** Register a wallet to receive updates from core */
 void RegisterWallet(CWalletInterface* pwalletIn);
 /** Unregister a wallet from core */

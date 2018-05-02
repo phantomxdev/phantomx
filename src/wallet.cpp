@@ -9,6 +9,7 @@
 #include "coincontrol.h"
 #include "kernel.h"
 #include "net.h"
+#include "util.h"
 #include "timedata.h"
 #include "txdb.h"
 #include "ui_interface.h"
@@ -25,6 +26,8 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+
+// include <QMessageBox>
 
 using namespace std;
 
@@ -1427,30 +1430,33 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 bool found = false;
                 if(coin_type == ONLY_DENOMINATED) {
                     //should make this a vector
-
                     found = IsDenominatedAmount(pcoin->vout[i].nValue);
-                } else if(coin_type == ONLY_NONDENOMINATED || coin_type == ONLY_NONDENOMINATED_NOTMN) {
-                    found = true;
+                } else if(coin_type == ONLY_NONDENOMINATED) {
+                    found = !(fMasterNode && pcoin->vout[i].nValue == MasternodeCollateral(pindexBest->nHeight)*COIN);
+                } else if(coin_type == ONLY_NONDENOMINATED_NOTMN) {
                     if (IsCollateralAmount(pcoin->vout[i].nValue)) continue; // do not use collateral amounts
                     found = !IsDenominatedAmount(pcoin->vout[i].nValue);
-                    if(found && coin_type == ONLY_NONDENOMINATED_NOTMN) found = (pcoin->vout[i].nValue != 20000*COIN); // do not use MN funds
+                    // if(found && coin_type == ONLY_NONDENOMINATED_NOTMN) found = (pcoin->vout[i].nValue != MasternodeCollateral(pindexBest->nHeight)*COIN); // do not use MN funds
+                    // found = true;
+
+                    if(found && fMasterNode) found = pcoin->vout[i].nValue != MasternodeCollateral(pindexBest->nHeight)*COIN; // do not use Hot MN funds
                 } else {
                     found = true;
                 }
                 if(!found) continue;
 
-				//isminetype mine = IsMine(pcoin->vout[i]);
-		bool mine = IsMine(pcoin->vout[i]);
+            		//isminetype mine = IsMine(pcoin->vout[i]);
+            		bool mine = IsMine(pcoin->vout[i]);
 
                 //if (!(IsSpent(wtxid, i)) && mine != ISMINE_NO &&
                 //    !IsLockedCoin((*it).first, i) && pcoin->vout[i].nValue > 0 &&
                 //    (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
                 //        vCoins.push_back(COutput(pcoin, i, nDepth, (mine & ISMINE_SPENDABLE) != ISMINE_NO));
-		//if (!(IsSpent(wtxid, i)) && mine &&
-		if (!(pcoin->IsSpent(i)) && mine &&
-                    !IsLockedCoin((*it).first, i) && pcoin->vout[i].nValue > 0 &&
-                    (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
-                        vCoins.push_back(COutput(pcoin, i, nDepth, mine));
+            		//if (!(IsSpent(wtxid, i)) && mine &&
+            		if (!(pcoin->IsSpent(i)) && mine &&
+                                !IsLockedCoin((*it).first, i) && pcoin->vout[i].nValue > 0 &&
+                                (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
+                                    vCoins.push_back(COutput(pcoin, i, nDepth, mine));
             }
         }
     }
@@ -1479,28 +1485,29 @@ void CWallet::AvailableCoinsMN(vector<COutput>& vCoins, bool fOnlyConfirmed, con
                 continue;
 
             int nDepth = pcoin->GetDepthInMainChain();
-            if (nDepth <= 0) // phantomxNOTE: coincontrol fix / ignore 0 confirm
+            if (nDepth <= 0) // TXNOTE: coincontrol fix / ignore 0 confirm
+                continue;
+
+            // do not use IX for inputs that have less then 6 blockchain confirmations
+            if (useIX && nDepth < 6)
                 continue;
 
            /* for (unsigned int i = 0; i < pcoin->vout.size(); i++)
                 if (!(pcoin->IsSpent(i)) && IsMine(pcoin->vout[i]) && pcoin->vout[i].nValue >= nMinimumInputValue &&
                 (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
                     vCoins.push_back(COutput(pcoin, i, nDepth));*/
-            // do not use IX for inputs that have less then 6 blockchain confirmations
-            if (useIX && nDepth < 6)
-                continue;
+
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
                 if(coin_type == ONLY_DENOMINATED) {
                     //should make this a vector
-
                     found = IsDenominatedAmount(pcoin->vout[i].nValue);
                 } else if(coin_type == ONLY_NONDENOMINATED || coin_type == ONLY_NONDENOMINATED_NOTMN) {
                     found = true;
                     if (IsCollateralAmount(pcoin->vout[i].nValue)) continue; // do not use collateral amounts
                     found = !IsDenominatedAmount(pcoin->vout[i].nValue);
-                    if(found && coin_type == ONLY_NONDENOMINATED_NOTMN) found = (pcoin->vout[i].nValue != 20000*COIN); // do not use MN funds
+                    if(found && coin_type == ONLY_NONDENOMINATED_NOTMN) found = (pcoin->vout[i].nValue != MasternodeCollateral(pindexBest->nHeight)*COIN); // do not use MN funds
                 } else {
                     found = true;
                 }
@@ -2031,6 +2038,11 @@ bool CWallet::SelectCoins(int64_t nTargetValue, unsigned int nSpendTime, set<pai
         return (nValueRet >= nTargetValue);
     }
 
+    // If coin control is not used and all coins were request we can activate the soft lock.
+    if (coin_type == ALL_COINS && fMasternodeSoftLock) {
+        AvailableCoins(vCoins, true, coinControl, ONLY_NONDENOMINATED_NOTMN, useIX);
+    }
+
     // coin control -> return all selected outputs (we want all selected to go into the transaction for sure)
     if (coinControl && coinControl->HasSelected())
     {
@@ -2137,7 +2149,7 @@ bool CWallet::SelectCoinsByDenominations(int nDenom, int64_t nValueMin, int64_t 
     {
         //there's no reason to allow inputs less than 1 COIN into DS (other than denominations smaller than that amount)
         if(out.tx->vout[out.i].nValue < 1*COIN && out.tx->vout[out.i].nValue != (.1*COIN)+100) continue;
-        if(fMasterNode && out.tx->vout[out.i].nValue == 20000*COIN) continue; //masternode input
+        if(fMasterNode && out.tx->vout[out.i].nValue == MasternodeCollateral(pindexBest->nHeight)*COIN) continue; //masternode input
         if(nValueRet + out.tx->vout[out.i].nValue <= nValueMax){
             bool fAccepted = false;
 
@@ -2213,7 +2225,7 @@ bool CWallet::SelectCoinsDark(int64_t nValueMin, int64_t nValueMax, std::vector<
     {
         //there's no reason to allow inputs less than 1 COIN into DS (other than denominations smaller than that amount)
         if(out.tx->vout[out.i].nValue < 1*COIN && out.tx->vout[out.i].nValue != (.1*COIN)+100) continue;
-        if(fMasterNode && out.tx->vout[out.i].nValue == 20000*COIN) continue; //masternode input
+        if(fMasterNode && out.tx->vout[out.i].nValue == MasternodeCollateral(pindexBest->nHeight)*COIN) continue; //masternode input
 
         if(nValueRet + out.tx->vout[out.i].nValue <= nValueMax){
             CTxIn vin = CTxIn(out.tx->GetHash(),out.i);
@@ -2406,12 +2418,16 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
     int64_t nValue = 0;
     BOOST_FOREACH (const PAIRTYPE(CScript, int64_t)& s, vecSend)
     {
-        if (nValue < 0)
-            return false;
+        if (nValue < 0){
+          strFailReason = _("Transaction amounts must be positive");
+          return false;
+        }
         nValue += s.second;
     }
-    if (vecSend.empty() || nValue < 0)
-        return false;
+    if (vecSend.empty() || nValue < 0){
+      strFailReason = _("Transaction amounts must be positive");
+      return false;
+    }
 
     wtxNew.BindWallet(this);
     CTransaction txNew;
@@ -2441,6 +2457,13 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                 {
                     if(coin_type == ALL_COINS) {
                         strFailReason = _("Insufficient funds.");
+                        if (fMasternodeSoftLock) {
+                            strFailReason += _("Masternode soft lock is active, some funds may have been excluded to protect masternode collaterals.");
+                            //QMessageBox msg;
+                            //msg.setText("Masternode SoftLock is active and your transaction was blocked to protect your Masternode. May you are sending more coins than in your balance available - excluding the masternode collaterals address.");
+                            //msg.exec();
+
+                        }
                     } else if (coin_type == ONLY_NONDENOMINATED) {
                         strFailReason = _("Unable to locate enough Darksend non-denominated funds for this transaction.");
                     } else if (coin_type == ONLY_NONDENOMINATED_NOTMN) {
@@ -3025,9 +3048,9 @@ bool CWallet::SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t 
 
     if (fDebug)
     {
-        printf("Stealth send to generated pubkey %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+        printf("Stealth send to generated pubkey %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
         printf("hash %s\n", addrTo.ToString().c_str());
-        printf("ephem_pubkey %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
+        printf("ephem_pubkey %" PRIszu ": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
     };
 
     std::vector<unsigned char> vchNarr;

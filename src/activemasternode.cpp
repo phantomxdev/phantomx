@@ -44,14 +44,14 @@ void CActiveMasternode::ManageStatus()
 
         LogPrintf("CActiveMasternode::ManageStatus() - Checking inbound connection to '%s'\n", service.ToString().c_str());
 
-                  
-            if(!ConnectNode((CAddress)service, service.ToString().c_str())){
-                notCapableReason = "Could not connect to " + service.ToString();
-                status = MASTERNODE_NOT_CAPABLE;
-                LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason.c_str());
-                return;
-            }
-        
+
+        if(!ConnectNode((CAddress)service, service.ToString().c_str())){
+            notCapableReason = "Could not connect to " + service.ToString();
+            status = MASTERNODE_NOT_CAPABLE;
+            LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason.c_str());
+            return;
+        }
+
 
         if(pwalletMain->IsLocked()){
             notCapableReason = "Wallet is locked.";
@@ -111,7 +111,7 @@ void CActiveMasternode::ManageStatus()
 
 // Send stop dseep to network for remote masternode
 bool CActiveMasternode::StopMasterNode(std::string strService, std::string strKeyMasternode, std::string& errorMessage) {
-	CTxIn vin;
+	  CTxIn vin;
     CKey keyMasternode;
     CPubKey pubKeyMasternode;
 
@@ -131,7 +131,7 @@ bool CActiveMasternode::StopMasterNode(std::string& errorMessage) {
 		return false;
 	}
 
-	status = MASTERNODE_STOPPED;
+	  status = MASTERNODE_STOPPED;
 
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
@@ -154,7 +154,7 @@ bool CActiveMasternode::StopMasterNode(CTxIn vin, CService service, CKey keyMast
 bool CActiveMasternode::Dseep(std::string& errorMessage) {
 	if(status != MASTERNODE_IS_CAPABLE && status != MASTERNODE_REMOTELY_ENABLED) {
 		errorMessage = "masternode is not in a running status";
-    	LogPrintf("CActiveMasternode::Dseep() - Error: %s\n", errorMessage.c_str());
+    LogPrintf("CActiveMasternode::Dseep() - Error: %s\n", errorMessage.c_str());
 		return false;
 	}
 
@@ -169,6 +169,7 @@ bool CActiveMasternode::Dseep(std::string& errorMessage) {
 
 	return Dseep(vin, service, keyMasternode, pubKeyMasternode, errorMessage, false);
 }
+
 
 bool CActiveMasternode::Dseep(CTxIn vin, CService service, CKey keyMasternode, CPubKey pubKeyMasternode, std::string &retErrorMessage, bool stop) {
     std::string errorMessage;
@@ -217,7 +218,7 @@ bool CActiveMasternode::Dseep(CTxIn vin, CService service, CKey keyMasternode, C
 }
 
 bool CActiveMasternode::RegisterByPubKey(std::string strService, std::string strKeyMasternode, std::string collateralAddress, std::string& errorMessage) {
-	CTxIn vin;
+	  CTxIn vin;
     CPubKey pubKeyCollateralAddress;
     CKey keyCollateralAddress;
     CPubKey pubKeyMasternode;
@@ -230,12 +231,18 @@ bool CActiveMasternode::RegisterByPubKey(std::string strService, std::string str
     }
 
     if(!GetMasterNodeVinForPubKey(collateralAddress, vin, pubKeyCollateralAddress, keyCollateralAddress)) {
-		errorMessage = "could not allocate vin for collateralAddress";
-    	LogPrintf("Register::Register() - Error: %s\n", errorMessage.c_str());
-		return false;
+
+    	// trying register again
+    	bool result = Register(vin, CService(strService), keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage);
+		  if(!result){
+  		  errorMessage = "Could not allocate vin for collateral Address. Check the configuration, IP Address or, first time, Send exactly 20000 PNX to Masternode Address.";
+      	LogPrintf("Register::Register() - Error: %s\n", errorMessage.c_str());
+		    return false;
+		  }
 	}
 	return Register(vin, CService(strService), keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage);
 }
+
 
 bool CActiveMasternode::Register(std::string strService, std::string strKeyMasternode, std::string txHash, std::string strOutputIndex, std::string& errorMessage) {
 	CTxIn vin;
@@ -251,12 +258,13 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
     }
 
     if(!GetMasterNodeVin(vin, pubKeyCollateralAddress, keyCollateralAddress, txHash, strOutputIndex)) {
-		errorMessage = "could not allocate vin";
+		errorMessage = "Could not allocate vin. Check the configuration, IP Address or, first time, Send exactly 20000 PNX to Masternode Address.";
     	LogPrintf("Register::Register() - Error: %s\n", errorMessage.c_str());
 		return false;
 	}
 	return Register(vin, CService(strService), keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage);
 }
+
 
 bool CActiveMasternode::Register(CTxIn vin, CService service, CKey keyCollateralAddress, CPubKey pubKeyCollateralAddress, CKey keyMasternode, CPubKey pubKeyMasternode, std::string &retErrorMessage) {
     std::string errorMessage;
@@ -427,7 +435,7 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
     // Filter
     BOOST_FOREACH(const COutput& out, vCoins)
     {
-        if(out.tx->vout[out.i].nValue == 20000*COIN) { //exactly
+        if(out.tx->vout[out.i].nValue >= MasternodeCollateral(pindexBest->nHeight)*COIN) { //exactly
         	filteredCoins.push_back(out);
         }
     }
@@ -449,7 +457,7 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternodeForPubKey(std::string co
     // Filter
     BOOST_FOREACH(const COutput& out, vCoins)
     {
-        if(out.tx->vout[out.i].scriptPubKey == scriptPubKey && out.tx->vout[out.i].nValue == 20000*COIN) { //exactly
+        if(out.tx->vout[out.i].scriptPubKey == scriptPubKey && out.tx->vout[out.i].nValue >= MasternodeCollateral(pindexBest->nHeight)*COIN) { //exactly
         	filteredCoins.push_back(out);
         }
     }
