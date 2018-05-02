@@ -134,16 +134,13 @@ Creating  pnx init file
     mkdir /wallets/phantomx/wallet
     nano /wallets/phantomx/wallet/phantomx.conf
 
-Add theses commands to phantomx.conf makefile
+Add theses commands to phantomx.conf makefile, please modify the user and password for a random rpcuser and rpcpassword lines, you don't need to remember it
 
     rpcallowip=127.0.0.1
     rpcuser=user
     rpcpassword=password
     listen=1
     server=1
-    rpcport=3000
-    txindex=1
-    maxconnections=500
     addnode=54.218.118.59:9340
     addnode=54.218.118.59:9341
 
