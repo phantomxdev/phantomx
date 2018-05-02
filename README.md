@@ -22,6 +22,7 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
  **Block Time:** 120 seconds<br>
  **Masternode Collateral:** 20.000 PNX<br>
  **Masternode Rewards:** 50% from PoS<br>
+ **RPC Port: 31978**<br>
 
 ### How to use PNX wallet
 
@@ -42,7 +43,7 @@ To compile the wallet we can choose between two method, the first "Method 1" is 
      sudo chmod +x install-pnx-wallet.sh
      ./install-pnx-wallet.sh
 
- Now the script will auto start to compile and to download the latest blockchain
+ Now the script will auto start to compile and to download the latest blockchain<br><br>
 
 
 
@@ -64,6 +65,7 @@ To compile the wallet we can choose between two method, the first "Method 1" is 
  ### A video tutorial using that autoinstall script can be watched at:
 
      TUTO Youtube : https://youtu.be/4oo4CqRBMh8
+
 
 
 ### **Method 2.) Install PNX wallet from a terminal prompt**
