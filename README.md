@@ -159,7 +159,7 @@ Get the latest blockchain to do a fast Sync
 
 Start the wallet
 
-    /wallets/phantomx/phantomxd -datadir=/wallets/phantomx/wallet -daemon -txindex
+    /wallets/phantomx/phantomxd -datadir=/wallets/phantomx/wallet -daemon -start
 
 
 
