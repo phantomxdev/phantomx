@@ -1,4 +1,3 @@
-
 # PhantomX - PNX
 
 PhantomX is a secure project aims to integrate cryptocurrencies in a real environment.
