@@ -84,6 +84,7 @@ const string strMessageMagic = "Cream Signed Message:\n";
 
 std::set<uint256> setValidatedTx;
 
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // dispatching functions
@@ -92,6 +93,8 @@ std::set<uint256> setValidatedTx;
 // These functions dispatch to one or all registered wallets
 
 namespace {
+
+
 struct CMainSignals {
     // Notifies listeners of updated transaction data (passing hash, transaction, and optionally the block it is found in.
     boost::signals2::signal<void (const CTransaction &, const CBlock *, bool)> SyncTransaction;

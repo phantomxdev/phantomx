@@ -1,43 +1,52 @@
 TEMPLATE = app
 TARGET = phantomx-qt
-VERSION = 1.3.0
+VERSION = 1.3.0.1
 INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor
+#INCLUDEPATH += /home/ale/deps
 DEFINES += ENABLE_WALLET
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
 QT += core gui network printsupport
-QMAKE_CXXFLAGS = -fpermissive
+QMAKE_CXXFLAGS = -fpermissive -static
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0
 }
 
-#QMAKE_LFLAGS *= /PhantomXCode/depends/x86_64-pc-linux-gnu/lib  -lQt5PrintSupport
-
-isEmpty(BDB_LIB_SUFFIX) {
-    macx:BDB_LIB_SUFFIX = -4.8
-}
-isEmpty(MINIUPNPC_LIB_SUFFIX) {
-    windows:MINIUPNPC_LIB_SUFFIX=-miniupnpc
-}
 
 windows {
-	# for extra security on Windows: enable ASLR and DEP via GCC linker flags
-	win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
-	# on win32: enable GCC large address aware linker flag
-	win32:QMAKE_LFLAGS *= -Wl,--large-address-aware -static
-	win32:QMAKE_LFLAGS += -static-libgcc -static-libstdc++
-	lessThan(QT_MAJOR_VERSION, 5): win32:QMAKE_LFLAGS *= -static
+	DEPS_PATH = /c/deps
+	SECP256K1_LIB_PATH = src/secp256k1/.libs
+	SECP256K1_INCLUDE_PATH = src/secp256k1/include
+	MINIUPNPC_LIB_PATH = $$DEPS_PATH/miniupnpc
+	MINIUPNPC_INCLUDE_PATH = $$DEPS_PATH
+	BOOST_LIB_PATH = $$DEPS_PATH/boost_1_58_0/stage/lib
+	BOOST_INCLUDE_PATH = $$DEPS_PATH/boost_1_58_0
+	BOOST_LIB_SUFFIX= -mgw73-mt-s-1_58
+	BDB_LIB_PATH = $$DEPS_PATH/db-5.0.32.NC/build_unix
+	BDB_INCLUDE_PATH = $$DEPS_PATH/db-5.0.32.NC/build_unix
+#uncomment and modify below if you don't to want to use openssl static lib provided by mingw-w64 package
+	#OPENSSL_LIB_PATH = $$DEPS_PATH/
+	#OPENSSL_INCLUDE_PATH = $$DEPS_PATH/
 }
 
 
 linux {
-     LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
-     CONFIG+= static
-     DEFINES+= STATIC
+	DEPS_PATH = $(HOME)/deps
+        SECP256K1_LIB_PATH = $(HOME)/phantomx-beta-wallet/src/secp256k1/.libs
+        SECP256K1_INCLUDE_PATH = $(HOME)/phantomx-beta-wallet/src/secp256k1/include
+## comment below dependencies if u don't need to compile a static binary on linux
+	MINIUPNPC_LIB_PATH = $$DEPS_PATH/miniupnpc
+	MINIUPNPC_INCLUDE_PATH = $$DEPS_PATH
+        BOOST_LIB_PATH = $$DEPS_PATH/boost_1_58_0/stage/lib
+        BOOST_INCLUDE_PATH = $$DEPS_PATH/boost_1_58_0
+	BDB_LIB_PATH = $$DEPS_PATH/db-5.0.32.NC/build_unix
+	BDB_INCLUDE_PATH = $$DEPS_PATH/db-5.0.32.NC/build_unix
+	OPENSSL_LIB_PATH = $$DEPS_PATH/openssl-1.0.2g
+	OPENSSL_INCLUDE_PATH = $$DEPS_PATH/openssl-1.0.2g/include
 }
 
 macx {
@@ -302,6 +311,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/messagemodel.h \
     src/qt/sendmessagesdialog.h \
     src/qt/sendmessagesentry.h \
+    src/qt/extendedoptionsmenu.h \
     src/qt/plugins/mrichtexteditor/mrichtextedit.h \
     src/qt/qvalidatedtextedit.h \
 	src/bloom.h \
@@ -317,7 +327,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/sph_shavite.h \
     src/sph_simd.h \
     src/sph_types.h \
-	src/txdb-leveldb.h
+	src/txdb-leveldb.h \
+    extendedoptionsmenu.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -361,6 +372,7 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiondescdialog.cpp \
     src/qt/bitcoinstrings.cpp \
     src/qt/bitcoinamountfield.cpp \
+    src/qt/extendedoptionsmenu.cpp \
     src/wallet.cpp \
     src/keystore.cpp \
     src/qt/transactionfilterproxy.cpp \
@@ -425,7 +437,9 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
 
 
 RESOURCES += \
-    src/qt/bitcoin.qrc
+    src/qt/bitcoin.qrc \
+    ubuntufont.qrc \
+    src/qt/res/resupdated.qrc
 
 FORMS += \
     src/qt/forms/coincontroldialog.ui \
@@ -447,7 +461,8 @@ FORMS += \
     src/qt/forms/messagepage.ui \
     src/qt/forms/sendmessagesentry.ui \
     src/qt/forms/sendmessagesdialog.ui \
-    src/qt/plugins/mrichtexteditor/mrichtextedit.ui
+    src/qt/plugins/mrichtexteditor/mrichtextedit.ui \
+    src/qt/forms/extendedoptionsmenu.ui
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
@@ -480,8 +495,42 @@ OTHER_FILES += \
 
 
 
-windows:DEFINES += WIN32
-windows:RC_FILE = src/qt/res/bitcoin-qt.rc
+    # platform specific defaults, if not overridden on command line
+    isEmpty(BOOST_LIB_SUFFIX) {
+        macx:BOOST_LIB_SUFFIX = -mt
+        windows:BOOST_LIB_SUFFIX = -mt
+    }
+
+    isEmpty(BOOST_THREAD_LIB_SUFFIX) {
+        BOOST_THREAD_LIB_SUFFIX = $$BOOST_LIB_SUFFIX
+        #win32:BOOST_THREAD_LIB_SUFFIX = _win32$$BOOST_LIB_SUFFIX
+        #else:BOOST_THREAD_LIB_SUFFIX = $$BOOST_LIB_SUFFIX
+    }
+
+    isEmpty(BDB_LIB_PATH) {
+        macx:BDB_LIB_PATH = /opt/local/lib/db48
+    }
+
+    isEmpty(BDB_LIB_SUFFIX) {
+        macx:BDB_LIB_SUFFIX = -4.8
+    }
+
+    isEmpty(BDB_INCLUDE_PATH) {
+        macx:BDB_INCLUDE_PATH = /opt/local/include/db48
+    }
+
+    isEmpty(BOOST_LIB_PATH) {
+        macx:BOOST_LIB_PATH = /opt/local/lib
+    }
+
+    isEmpty(BOOST_INCLUDE_PATH) {
+        macx:BOOST_INCLUDE_PATH = /opt/local/include
+    }
+
+    windows:DEFINES += WIN32
+    windows:RC_FILE = src/qt/res/bitcoin-qt.rc
+
+
 windows:!contains(MINGW_THREAD_BUGFIX, 0) {
     # At least qmake's win32-g++-cross profile is missing the -lmingwthrd
     # thread-safety flag. GCC has -mthreads to enable this, but it doesn't

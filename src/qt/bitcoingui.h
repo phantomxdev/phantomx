@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QFontDatabase>
 
 #include <stdint.h>
 
@@ -19,6 +20,7 @@ class RPCConsole;
 class MasternodeManager;
 class MessagePage;
 class MessageModel;
+class ExtendedOptionsMenu;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -76,6 +78,7 @@ private:
     SignVerifyMessageDialog *signVerifyMessageDialog;
     MasternodeManager *masternodeManagerPage;
     MessagePage *messagePage;
+    ExtendedOptionsMenu *extendedOptionsMenuPage;
 
     QLabel *labelEncryptionIcon;
     QLabel *labelStakingIcon;
@@ -106,6 +109,7 @@ private:
     QAction *openRPCConsoleAction;
     QAction *masternodeManagerAction;
     QAction *messageAction;
+    QAction *extendedOptionsMenuAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -179,6 +183,9 @@ private slots:
     void gotoVerifyMessageTab(QString addr = "");
 
     void gotoMessagePage();
+
+    /** Display Advanced Options dialog */
+    void gotoExtendedMenuOptionsPage();
 
     /** Show configuration dialog */
     void optionsClicked();

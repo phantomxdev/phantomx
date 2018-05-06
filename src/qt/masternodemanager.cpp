@@ -30,6 +30,7 @@ MasternodeManager::MasternodeManager(QWidget *parent) :
     ui(new Ui::MasternodeManager),
     clientModel(0),
     walletModel(0)
+
 {
     ui->setupUi(this);
 

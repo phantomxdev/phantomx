@@ -35,6 +35,7 @@
 #include "masternodemanager.h"
 #include "messagemodel.h"
 #include "messagepage.h"
+#include "extendedoptionsmenu.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -64,6 +65,7 @@
 #include <QScrollArea>
 #include <QScroller>
 #include <QTextDocument>
+#include <QFontDatabase>
 
 #include <iostream>
 
@@ -102,6 +104,9 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     "QMenu          { background: rgb(30,32,36); color: rgb(222,222,222); }"
     "QMenu::item:selected { background-color: rgb(48,140,198); }");
 
+    QFontDatabase::addApplicationFont(":/fonts/Ubuntu-L.ttf");
+    qApp->setFont(QFont("Ubuntu", 11, QFont::Normal, false));
+
 
     // Accept D&D of URIs
     setAcceptDrops(true);
@@ -138,6 +143,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     masternodeManagerPage = new MasternodeManager(this);
     messagePage = new MessagePage(this);
 
+    extendedOptionsMenuPage = new ExtendedOptionsMenu(this);
+
     centralStackedWidget = new QStackedWidget(this);
     centralStackedWidget->setContentsMargins(0, 0, 0, 0);
     centralStackedWidget->addWidget(overviewPage);
@@ -147,6 +154,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     centralStackedWidget->addWidget(sendCoinsPage);
     centralStackedWidget->addWidget(masternodeManagerPage);
     centralStackedWidget->addWidget(messagePage);
+    centralStackedWidget->addWidget(extendedOptionsMenuPage);
 
     QWidget *centralWidget = new QWidget();
     QVBoxLayout *centralLayout = new QVBoxLayout(centralWidget);
@@ -303,6 +311,12 @@ void BitcoinGUI::createActions()
     messageAction->setCheckable(true);
     tabGroup->addAction(messageAction);
 
+    extendedOptionsMenuAction = new QAction(QIcon(":/icons2/icons2/advanceoptions.png"), tr("&Advanced Options"), this);
+    extendedOptionsMenuAction->setToolTip(tr("Configure advanced options."));
+    extendedOptionsMenuAction->setCheckable(true);
+    extendedOptionsMenuAction->setEnabled(false);
+    tabGroup->addAction(extendedOptionsMenuAction);
+
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -317,6 +331,8 @@ void BitcoinGUI::createActions()
     connect(masternodeManagerAction, SIGNAL(triggered()), this, SLOT(gotoMasternodeManagerPage()));
     connect(messageAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(messageAction, SIGNAL(triggered()), this, SLOT(gotoMessagePage()));
+    connect(extendedOptionsMenuAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(extendedOptionsMenuAction, SIGNAL(triggered()), this, SLOT(gotoExtendedMenuOptionsPage()));
 
     quitAction = new QAction(tr("E&xit"), this);
     quitAction->setToolTip(tr("Quit application"));
@@ -429,6 +445,7 @@ void BitcoinGUI::createToolBars()
     toolbar->addAction(addressBookAction);
     toolbar->addAction(masternodeManagerAction);
     toolbar->addAction(messageAction);
+    toolbar->addAction(extendedOptionsMenuAction);
 
     QWidget *spacer = makeToolBarSpacer();
     toolbar->addWidget(spacer);
@@ -855,6 +872,15 @@ void BitcoinGUI::gotoMasternodeManagerPage()
 {
     masternodeManagerAction->setChecked(true);
     centralStackedWidget->setCurrentWidget(masternodeManagerPage);
+
+    exportAction->setEnabled(false);
+    disconnect(exportAction, SIGNAL(triggered()), 0, 0);
+}
+
+void BitcoinGUI::gotoExtendedMenuOptionsPage()
+{
+    extendedOptionsMenuAction->setChecked(true);
+    centralStackedWidget->setCurrentWidget(extendedOptionsMenuPage);
 
     exportAction->setEnabled(false);
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
