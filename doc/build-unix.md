@@ -177,7 +177,8 @@ sudo apt-get install build-essential libtool automake autotools-dev autoconf pkg
 ## Compile all dependencies manually and use their static libs
 ### Download and build BerkeleyDB 5.0.32.NC
 ```
-cd ~/
+mkdir ~/deps
+cd ~/deps
 wget 'http://download.oracle.com/berkeley-db/db-5.0.32.NC.tar.gz'
 tar -xzvf db-5.0.32.NC.tar.gz
 cd db-5.0.32.NC/build_unix/
@@ -210,8 +211,9 @@ and place it in your deps folder, then :
 cd ~/deps
 tar xvfz miniupnpc-1.9.tar.gz
 
-cd miniupnpc-1.9
-make init upnpc-static
+mv miniupnpc-1.9 miniupnpc
+cd miniupnpc
+make upnpc-static
 ```
 ==> Important : don't forget to rename "miniupnpc-1.9" directory to "miniupnpc"
 
