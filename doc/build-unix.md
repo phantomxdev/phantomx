@@ -222,6 +222,7 @@ make upnpc-static
 download 1.0.2g version here : https://www.openssl.org/source/old/1.0.2/openssl-1.0.2g.tar.gz<br>
 place archive in deps folders then :
 ```
+cd ~/deps
 tar xvfz openssl-1.0.2g.tar.gz
 cd openssl-1.0.2g
 ./config no-shared no-dso
