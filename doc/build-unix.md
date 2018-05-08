@@ -235,15 +235,17 @@ Download QT 5.10.1 sources
 https://download.qt.io/official_releases/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz<br>
 Extract in deps folder
 ```
-tar xvfz qt-everywhere-opensource-src-5.10.1.tar.gz
+cd ~/deps/
+tar xvfJ qt-everywhere-src-5.10.1.tar.xz
 ```
 after everything is extracted, create another directory where static libs will be installed.
 For example, i created ~/deps/Qt/5.10.1_static and used that directory in configure command below (it may take a while) :
 ```
+mkdir  ~/deps/Qt
 mkdir  ~/deps/Qt/5.10.1_static
-cd ~/deps/qt-everywhere-opensource-src-5.10.1
+cd ~/deps/qt-everywhere-src-5.10.1
 
-./configure -static -opensource -release -confirm-license -no-compile-examples -nomake tests -prefix ~/deps/Qt/5.4.2_static -qt-zlib -qt-libpng -no-libjpeg -qt-xcb -qt-freetype -qt-pcre -qt-harfbuzz -largefile -no-openssl -gtkstyle -skip wayland -skip qtserialport -skip script -pulseaudio -alsa -c++11 -nomake tools
+./configure -static -opensource -release -confirm-license -no-compile-examples -nomake tests -prefix ~/deps/Qt/5.10.1_static -qt-zlib -qt-libpng -no-libjpeg -qt-xcb -qt-freetype -qt-pcre -qt-harfbuzz -no-openssl -skip wayland -skip qtserialport -skip script -pulseaudio -alsa -nomake tools
 ```
 After it successfuly ends :
 ```
