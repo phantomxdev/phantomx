@@ -182,7 +182,7 @@ Start the wallet
 
  **Masternode on Windows:** https://phantomx.co/guide/how-to-create-masternode-windows<br>
  **Masternode on Linux:** https://phantomx.co/guide/how-to-create-masternode-linux<br>
- **Updating blockchain:** https://phantomx.co/guide/how-to-update-blockchain
+ **Updating blockchain:** http://faq.phantomx.co/articles/25723-synchronize-your-wallet-using-the-latest-blockchain-file-fast-sync
 
 
 
