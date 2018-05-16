@@ -23,7 +23,8 @@ PhantomX is a secure project aims to integrate cryptocurrencies in a real enviro
  **Block Time:** 120 seconds<br>
  **Masternode Collateral:** 20.000 PNX<br>
  **Masternode Rewards:** 50% from PoS<br>
- **RPC Port:** 31978<br>
+ **RPC Port:** 21978<br>
+ **P2P Port:** 31978<br>
 
 <br><br>
 
