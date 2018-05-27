@@ -181,9 +181,9 @@ Start the wallet
 ### Technical guides for more detail
 
  **Staking on Windows/Linux with GUI:** http://faq.phantomx.co/articles/25773-staking-setup-guide-with-gui-qt-wallet<br>
- **Staking on Linux WITHOUT GUI:** http://faq.phantomx.co/articles/25774-staking-setup-guide-for-linuxraspberrypi-not-gui-wallet<br>
+ **Staking on Linux WITHOUT GUI:** http://faq.phantomx.co/articles/25774-staking-setup-guide-for-linuxraspberrypi-not-gui-wallet<br><br>
  **Masternode on Windows/Linux with GUI:** http://faq.phantomx.co/articles/25789-masternode-setup-guide-with-gui-qt-wallet<br>
- **Masternode on Linux WITHOUT GUI:** http://faq.phantomx.co/articles/25792-masternode-setup-guide-linuxraspberrypi-not-gui<br>
+ **Masternode on Linux WITHOUT GUI:** http://faq.phantomx.co/articles/25792-masternode-setup-guide-linuxraspberrypi-not-gui<br><br>
  **Updating blockchain:** http://faq.phantomx.co/articles/25723-synchronize-your-wallet-using-the-latest-blockchain-file-fast-sync
 
 
