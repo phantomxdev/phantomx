@@ -180,9 +180,9 @@ Start the wallet
 
 ### Technical guides for more detail
 
- **Masternode on Windows:** https://phantomx.org/guide/how-to-create-masternode-windows<br>
- **Masternode on Linux:** https://phantomx.org/guide/how-to-create-masternode-linux<br>
- **Updating blockchain:** https://phantomx.org/guide/how-to-update-blockchain
+ **Masternode on Windows:** https://phantomx.co/guide/how-to-create-masternode-windows<br>
+ **Masternode on Linux:** https://phantomx.co/guide/how-to-create-masternode-linux<br>
+ **Updating blockchain:** https://phantomx.co/guide/how-to-update-blockchain
 
 ### Contacts
  **Website:** https://www.phantomx.co<br>
