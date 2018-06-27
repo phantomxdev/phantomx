@@ -196,6 +196,8 @@ http://faq.phantomx.co/articles/25792-masternode-setup-guide-linuxraspberrypi-no
 http://faq.phantomx.co/articles/25723-synchronize-your-wallet-using-the-latest-blockchain-file-fast-sync<br>
 
 
+
+
 ### Contacts
  **Website:** https://www.phantomx.co<br>
  **Telegram:** https://t.me/joinchat/GuzdQUN9fdpX3fSJ4bqWTQ<br>
