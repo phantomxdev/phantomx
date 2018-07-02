@@ -164,12 +164,12 @@ Get the latest blockchain to do a fast Sync
     cd /wallets/
     wget http://phantomx.co/download/latest-blockchain.zip
     sudo unzip /wallets/latest-blockchain.zip
-    sudo cp -R /wallets/wallets/latest-blockchain/database /wallets/phantomx/wallet
-    sudo cp -R /wallets/wallets/latest-blockchain/txleveldb /wallets/phantomx/wallet
-    sudo cp  /wallets/wallets/latest-blockchain/peers.dat /wallets/phantomx/wallet/peers.dat
-    sudo cp  /wallets/wallets/latest-blockchain/blk0001.dat /wallets/phantomx/wallet/blk0001.dat
+    sudo cp -R /wallets/latest-blockchain/database /wallets/phantomx/wallet
+    sudo cp -R /wallets/latest-blockchain/txleveldb /wallets/phantomx/wallet
+    sudo cp  /wallets/latest-blockchain/peers.dat /wallets/phantomx/wallet/peers.dat
+    sudo cp  /wallets/latest-blockchain/blk0001.dat /wallets/phantomx/wallet/blk0001.dat
     sudo rm -r /wallets/latest-blockchain.zip
-    sudo rm -r /wallets/wallets
+    sudo rm -r /wallets/latest-blockchain
 
 
 Start the wallet
