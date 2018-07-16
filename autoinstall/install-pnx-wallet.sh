@@ -5,7 +5,7 @@
 # Second Updated by: @kiolx
 # Forked from: https://github.com/phantomxdev/phantomx
 # Web: http://www.phantomx.co
-# Version: 1.6
+# Version: 1.7
 #
 # Usage:
 #   This script is for auto-compile the PNX wallet taken from github official
@@ -203,8 +203,12 @@ echo "Creating phantomx.conf file"
 echo "rpcallowip=127.0.0.1" >> /wallets/phantomx/wallet/phantomx.conf
 echo "rpcuser=user" >> /wallets/phantomx/wallet/phantomx.conf
 echo "rpcpassword=password" >> /wallets/phantomx/wallet/phantomx.conf
+echo "rpcport=21978" >> /wallets/phantomx/wallet/phantomx.conf
+echo "staking=1" >> /wallets/phantomx/wallet/phantomx.conf
 echo "listen=1" >> /wallets/phantomx/wallet/phantomx.conf
 echo "server=1" >> /wallets/phantomx/wallet/phantomx.conf
+echo "addnode=195.201.119.57" >> /wallets/phantomx/wallet/phantomx.conf
+echo "addnode=159.69.28.84" >> /wallets/phantomx/wallet/phantomx.conf
 echo "addnode=54.218.118.59:9340" >> /wallets/phantomx/wallet/phantomx.conf
 echo "addnode=54.218.118.59:9341" >> /wallets/phantomx/wallet/phantomx.conf
 
@@ -267,4 +271,3 @@ else
 	outputColorYellow "FAILED! Scroll up for details."
 
 fi
-
