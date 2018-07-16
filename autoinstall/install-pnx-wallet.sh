@@ -200,7 +200,7 @@ cp /wallets/phantomx/src/phantomxd /wallets/phantomx/
 mkdir /wallets/phantomx/wallet
 
 rpcuservar=$(date +%s | sha256sum | base64 | head -c 32)
-rpcpassvar=$(date +%s | sha256sum | base64 | head -c 32)
+rpcpassvar=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1)
 
 echo "Creating phantomx.conf file"
 echo "rpcallowip=127.0.0.1" >> /wallets/phantomx/wallet/phantomx.conf
