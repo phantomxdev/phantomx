@@ -31,7 +31,7 @@ USE THIS SCRIPT ON FRESH SYSTEM INSTALL !
 Connect to your System using SSH & execute the following commands
 
     cd ~
-    wget https://raw.githubusercontent.com/PhantomxTeam/autoinstallpnx/master/autoinstallpnx.sh
+    wget https://raw.githubusercontent.com/phantomxdev/phantomx/master/autoinstall/install-pnx-wallet.sh
     sudo chmod +x autoinstallpnx.sh
     ./autoinstallpnx.sh
 
