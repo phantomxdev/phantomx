@@ -2,9 +2,10 @@
 ################################################################################
 # Original Author:   Alex Lucas
 # Updated by: @Aangel
+# Second Updated by: @kiolx
 # Forked from: https://github.com/phantomxdev/phantomx
 # Web: http://www.phantomx.co
-# Version: 1.5
+# Version: 1.6
 #
 # Usage:
 #   This script is for auto-compile the PNX wallet taken from github official
@@ -217,11 +218,12 @@ outputColorYellow "#   Downloading the latest blockchain  #"
 outputColorYellow "########################################"
 
 echo "Getting latest blockchain from official site"
-cd /wallets/
+mkdir /wallets/latest-blockchain
+cd /wallets/latest-blockchain
 wget http://phantomx.co/download/latest-blockchain.zip
 
 echo "Extrating files..."
-sudo unzip /wallets/latest-blockchain.zip
+sudo unzip /wallets/latest-blockchain/latest-blockchain.zip
 
 echo "Copying files"
 sudo cp -R /wallets/latest-blockchain/database /wallets/phantomx/wallet
@@ -230,7 +232,7 @@ sudo cp  /wallets/latest-blockchain/peers.dat /wallets/phantomx/wallet/peers.dat
 sudo cp  /wallets/latest-blockchain/blk0001.dat /wallets/phantomx/wallet/blk0001.dat
 
 echo "Removing temp files"
-sudo rm -r /wallets/latest-blockchain.zip
+sudo rm -r /wallets/latest-blockchain/latest-blockchain.zip
 #sudo rm -r /wallets/wallets
 
 echo "Fixing Permissions for non default root user"
@@ -265,3 +267,4 @@ else
 	outputColorYellow "FAILED! Scroll up for details."
 
 fi
+
