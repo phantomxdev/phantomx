@@ -32,8 +32,8 @@ Connect to your System using SSH & execute the following commands
 
     cd ~
     wget https://raw.githubusercontent.com/phantomxdev/phantomx/master/autoinstall/install-pnx-wallet.sh
-    sudo chmod +x autoinstallpnx.sh
-    ./autoinstallpnx.sh
+    sudo chmod +x install-pnx-wallet.sh
+    ./install-pnx-wallet.sh
 
 Now the script will auto start to compile and to download the latest blockchain
 
