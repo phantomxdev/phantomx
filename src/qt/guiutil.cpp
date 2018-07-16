@@ -13,7 +13,6 @@
 #include <QDoubleValidator>
 #include <QFont>
 #include <QLineEdit>
-#include <QUrl>
 #include <QTextDocument> // For Qt::escape
 #include <QAbstractItemView>
 #include <QClipboard>
@@ -41,6 +40,27 @@
 #include "shlobj.h"
 #include "shellapi.h"
 #endif
+
+
+
+// Boost library updated MOD - INIT
+#if QT_VERSION < 0x050000
+#include <QUrl>
+#else
+#include <QUrlQuery>
+#endif
+
+#include <QUrlQuery>
+
+#if BOOST_FILESYSTEM_VERSION >= 3
+#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
+#endif
+
+#if BOOST_FILESYSTEM_VERSION >= 3
+static boost::filesystem::detail::utf8_codecvt_facet utf8;
+#endif
+// Boost library updated MOD - END
+
 
 namespace GUIUtil {
 
@@ -167,6 +187,17 @@ void copyEntryData(QAbstractItemView *view, int column, int role)
         // Copy first item
         QApplication::clipboard()->setText(selection.at(0).data(role).toString());
     }
+}
+
+
+void showGlobalConfig()
+{
+
+    boost::filesystem::path pathFile = GetDataDir() / "phantomx.conf";
+
+    /* Open phantomx.conf with the associated application*/
+    if (boost::filesystem::exists(pathFile))
+        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathFile)));
 }
 
 QString getSaveFileName(QWidget *parent, const QString &caption,
@@ -493,7 +524,36 @@ void SetBlackThemeQSS(QApplication& app)
                       "QToolBar       { background: rgb(30,32,36); border: none; }");
 }
 
+
+
+//LIBRARY UPDATED MOD BOOST - INIT
+#if BOOST_FILESYSTEM_VERSION >= 3
+boost::filesystem::path qstringToBoostPath(const QString &path)
+{
+    return boost::filesystem::path(path.toStdString(), utf8);
+}
+
+QString boostPathToQString(const boost::filesystem::path &path)
+{
+    return QString::fromStdString(path.string(utf8));
+}
+#else
+#warning Conversion between boost path and QString can use invalid character encoding with boost_filesystem v2 and older
+boost::filesystem::path qstringToBoostPath(const QString &path)
+{
+    return boost::filesystem::path(path.toStdString());
+}
+
+QString boostPathToQString(const boost::filesystem::path &path)
+{
+    return QString::fromStdString(path.string());
+}
+#endif
+//LIBRARY UPDATED MOD BOOST - END
+
+
 } // namespace GUIUtil
+
 
 //QPushButton    { background: rgb(224,55,63); //red color
 //QToolButton:checked: rgb(224,55,63); //red color

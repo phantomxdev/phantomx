@@ -110,6 +110,7 @@ private:
     QAction *masternodeManagerAction;
     QAction *messageAction;
     QAction *extendedOptionsMenuAction;
+    QAction *showGlobalConfigAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;

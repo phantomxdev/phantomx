@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = phantomx-qt
-VERSION = 1.3.0.1
+VERSION = 1.3.0.2
 INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor
 #INCLUDEPATH += /home/ale/deps
 DEFINES += ENABLE_WALLET
@@ -8,8 +8,11 @@ DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
-QT += core gui network printsupport
+QT += core gui network printsupport xml
 QMAKE_CXXFLAGS = -fpermissive -static
+
+
+
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
@@ -47,7 +50,15 @@ linux {
 	BDB_INCLUDE_PATH = $$DEPS_PATH/db-5.0.32.NC/build_unix
 	OPENSSL_LIB_PATH = $$DEPS_PATH/openssl-1.0.2g
 	OPENSSL_INCLUDE_PATH = $$DEPS_PATH/openssl-1.0.2g/include
+        QUAZIP_FOLDER = $$DEPS_PATH/quazip-master/quazip
+        ZLIB_FOLDER = $$DEPS_PATH/zlib-1.2.11
+
+        HEADERS += /home/ale/deps/quazip-master/quazip/*.h
+        SOURCES += /home/ale/deps/quazip-master/quazip/*.cpp
+        SOURCES += /home/ale/deps/quazip-master/quazip/*.c
+        #LIBS += -L$${QUAZIP_FOLDER} -lquazip
 }
+
 
 macx {
   QMAKE_LFLAGS *= -static
@@ -59,6 +70,14 @@ macx {
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
+
+
+
+        LIBS += -L$${ZLIB_FOLDER} -lz
+        INCLUDEPATH += $${QUAZIP_FOLDER}
+        LIBS += -L$${QUAZIP_FOLDER} -lquazip
+
+
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
@@ -562,6 +581,7 @@ windows:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
 LIBS += -lsecp256k1
 LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
 windows:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
+
 
 
 

@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QMessageBox>
 
+
+#include <boost/filesystem.hpp>
+
 class SendCoinsRecipient;
 
 QT_BEGIN_NAMESPACE
@@ -75,6 +78,9 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 
+    // Browse phantomx.conf file.
+    void showGlobalConfig();
+
     /** Qt event filter that intercepts ToolTipChange events, and replaces the tooltip with a rich text
       representation if needed. This assures that Qt can word-wrap long tooltip messages.
       Tooltips longer than the provided size threshold (in characters) are wrapped.
@@ -95,6 +101,12 @@ namespace GUIUtil
 
     bool GetStartOnSystemStartup();
     bool SetStartOnSystemStartup(bool fAutoStart);
+
+    /* Convert QString to OS specific boost path through UTF-8 - BOOST Helper */
+    boost::filesystem::path qstringToBoostPath(const QString &path);
+
+    /* Convert OS specific boost path to QString through UTF-8 - BOOST Helper*/
+    QString boostPathToQString(const boost::filesystem::path &path);
 
     /** Help message for Bitcoin-Qt, shown with --help. */
     class HelpMessageBox : public QMessageBox

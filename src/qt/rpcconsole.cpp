@@ -486,3 +486,9 @@ void RPCConsole::on_btnClearTrafficGraph_clicked()
 {
     ui->trafficGraph->clear();
 }
+
+//Open phantomx.conf from gui
+void RPCConsole::showGlobalConfig()
+{
+    GUIUtil::showGlobalConfig();
+}

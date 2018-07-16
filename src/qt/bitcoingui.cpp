@@ -252,8 +252,12 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     // Clicking on "Verify Message" in the address book sends you to the verify message tab
     connect(addressBookPage, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
+
     // Clicking on "Sign Message" in the receive coins page sends you to the sign message tab
     connect(receiveCoinsPage, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
+
+    // Clicking on phantomx.conf (to RPC console)
+    connect(showGlobalConfigAction, SIGNAL(triggered()), rpcConsole, SLOT(showGlobalConfig()));
 
     gotoOverviewPage();
 }
@@ -311,11 +315,14 @@ void BitcoinGUI::createActions()
     messageAction->setCheckable(true);
     tabGroup->addAction(messageAction);
 
+    //Advance tab
     extendedOptionsMenuAction = new QAction(QIcon(":/icons2/icons2/advanceoptions.png"), tr("&Advanced Options"), this);
     extendedOptionsMenuAction->setToolTip(tr("Configure advanced options."));
-    extendedOptionsMenuAction->setCheckable(true);
+    //extendedOptionsMenuAction->setCheckable(true);
     extendedOptionsMenuAction->setEnabled(false);
     tabGroup->addAction(extendedOptionsMenuAction);
+
+
 
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
@@ -360,6 +367,8 @@ void BitcoinGUI::createActions()
     lockWalletAction->setToolTip(tr("Lock wallet"));
     signMessageAction = new QAction(tr("Sign &message..."), this);
     verifyMessageAction = new QAction(tr("&Verify message..."), this);
+    // Configuration files.
+    showGlobalConfigAction = new QAction(tr("Open phantomx.conf"), this);
 
     exportAction = new QAction(tr("&Export..."), this);
     exportAction->setToolTip(tr("Export the data in the current tab to a file"));
@@ -404,6 +413,7 @@ void BitcoinGUI::createMenuBar()
     settings->addAction(lockWalletAction);
     settings->addSeparator();
     settings->addAction(optionsAction);
+    settings->addAction(showGlobalConfigAction);
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
@@ -472,7 +482,7 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
 #endif
             if(trayIcon)
             {
-                trayIcon->setToolTip(tr("PhantomX client") + QString(" ") + tr("[testnet]"));
+                trayIcon->setToolTip(tr("X client") + QString(" ") + tr("[testnet]"));
                 trayIcon->setIcon(QIcon(":/icons/toolbar_testnet"));
                 toggleHideAction->setIcon(QIcon(":/icons/toolbar_testnet"));
             }
@@ -547,7 +557,7 @@ void BitcoinGUI::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIconMenu = new QMenu(this);
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip(tr("PhantomX client"));
+    trayIcon->setToolTip(tr("X client"));
     trayIcon->setIcon(QIcon(":/icons/toolbar"));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -570,6 +580,8 @@ void BitcoinGUI::createTrayIcon()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(optionsAction);
     trayIconMenu->addAction(openRPCConsoleAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(showGlobalConfigAction);
 #ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
@@ -617,7 +629,7 @@ void BitcoinGUI::setNumConnections(int count)
     default: icon = fUseBlackTheme ? ":/icons/black/connect_4" : ":/icons/connect_4"; break;
     }
     labelConnectionsIcon->setPixmap(QIcon(icon).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to PhantomX network", "", count));
+    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to X network", "", count));
 }
 
 void BitcoinGUI::setNumBlocks(int count)
@@ -702,7 +714,7 @@ void BitcoinGUI::setNumBlocks(int count)
 
 void BitcoinGUI::message(const QString &title, const QString &message, bool modal, unsigned int style)
 {
-    QString strTitle = tr("PhantomX") + " - ";
+    QString strTitle = tr("X") + " - ";
     // Default to information icon
     int nMBoxIcon = QMessageBox::Information;
     int nNotifyIcon = Notificator::Information;
@@ -985,7 +997,7 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
         if (nValidUrisFound)
             gotoSendCoinsPage();
         else
-            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PhantomX address or malformed URI parameters."));
+            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid X address or malformed URI parameters."));
     }
 
     event->acceptProposedAction();
@@ -1000,7 +1012,7 @@ void BitcoinGUI::handleURI(QString strURI)
         gotoSendCoinsPage();
     }
     else
-        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid PhantomX address or malformed URI parameters."));
+        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid X address or malformed URI parameters."));
 }
 
 void BitcoinGUI::setEncryptionStatus(int status)

@@ -55,6 +55,8 @@ public slots:
     void browseHistory(int offset);
     /** Scroll console view to end */
     void scrollToEnd();
+    /** Show global configuration file */
+    void showGlobalConfig();
 signals:
     // For RPC command executor
     void stopExecutor();

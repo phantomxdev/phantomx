@@ -1164,8 +1164,42 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                     map<string, vector<string> >& mapMultiSettingsRet)
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
-    if (!streamConfig.good())
-        return; // No bitcoin.conf file is OK
+    if (!streamConfig.good()){
+            // Create empty phantomx.conf if it does not excist
+            FILE* configFile = fopen(GetConfigFile().string().c_str(), "w");
+
+            // If it is the first time that the file is created, we fill with some info
+            if (configFile)
+            {
+
+                //Generate Random string for RPC user
+                std::string rstruser = random_string();
+                std::string rstrpass = random_string();
+
+                //Fill phantomx.conf with staking deafult info
+                const char* chStr1 = "rpcallowip=127.0.0.1";
+                const char* chStr2 = "rpcuser=";
+                const char* chStr21 =  rstruser.c_str();
+                const char* chStr3 = "rpcpassword=";
+                const char* chStr31 =  rstrpass.c_str();
+                const char* chStr32 = "rpcport=21978";
+                const char* chStr4 = "staking=1";
+                const char* chStr5 = "server=1";
+                const char* chStr6 = "listen=1";
+                const char* chStr7 = "addnode=195.201.119.57";
+                const char* chStr8 = "addnode=159.69.28.84";
+                const char* chStr9 = "addnode=54.218.118.59:9340";
+                const char* chStr10 = "addnode=54.218.118.59:9341";
+
+                fprintf(configFile, "%s\n%s%s\n%s%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", chStr1, chStr2, chStr21, chStr3, chStr31, chStr32, chStr4, chStr5, chStr6, chStr7, chStr8, chStr9, chStr10);
+                fclose(configFile);
+
+            // else if the file exist return instead
+            }else if (configFile != NULL){
+                fclose(configFile);
+            }
+            return; // Nothing to read, so just return
+        }
 
     set<string> setOptions;
     setOptions.insert("*");
@@ -1399,4 +1433,17 @@ std::string EpochToDateTimeStrFormat(int64_t nTime)
 {
     std::string strTimestampFormat = "%Y-%m-%d %H:%M:%S UTC";
     return DateTimeStrFormat(strTimestampFormat.c_str(), nTime);
+}
+
+
+std::string random_string()
+{
+     std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+
+     std::random_device rd;
+     std::mt19937 generator(rd());
+
+     std::shuffle(str.begin(), str.end(), generator);
+
+     return str.substr(0, 32);    // assumes 32 < number of characters in str
 }
