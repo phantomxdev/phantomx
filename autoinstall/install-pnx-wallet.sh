@@ -5,7 +5,7 @@
 # Second Updated by: @kiolx
 # Forked from: https://github.com/phantomxdev/phantomx
 # Web: http://www.phantomx.co
-# Version: 1.7
+# Version: 1.8
 #
 # Usage:
 #   This script is for auto-compile the PNX wallet taken from github official
@@ -199,10 +199,13 @@ cd /wallets
 cp /wallets/phantomx/src/phantomxd /wallets/phantomx/
 mkdir /wallets/phantomx/wallet
 
+rpcuservar=$(date +%s | sha256sum | base64 | head -c 32)
+rpcpassvar=$(date +%s | sha256sum | base64 | head -c 32)
+
 echo "Creating phantomx.conf file"
 echo "rpcallowip=127.0.0.1" >> /wallets/phantomx/wallet/phantomx.conf
-echo "rpcuser=user" >> /wallets/phantomx/wallet/phantomx.conf
-echo "rpcpassword=password" >> /wallets/phantomx/wallet/phantomx.conf
+echo "rpcuser=${rpcuservar}" >> /wallets/phantomx/wallet/phantomx.conf
+echo "rpcpassword=${rpcpassvar}" >> /wallets/phantomx/wallet/phantomx.conf
 echo "rpcport=21978" >> /wallets/phantomx/wallet/phantomx.conf
 echo "staking=1" >> /wallets/phantomx/wallet/phantomx.conf
 echo "listen=1" >> /wallets/phantomx/wallet/phantomx.conf
