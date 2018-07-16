@@ -154,8 +154,12 @@ Add theses commands to phantomx.conf makefile, please modify the user and passwo
     rpcallowip=127.0.0.1
     rpcuser=user
     rpcpassword=password
+    rpcport=21978
+    staking=1
     listen=1
     server=1
+    addnode=195.201.119.57
+    addnode=159.69.28.84
     addnode=54.218.118.59:9340
     addnode=54.218.118.59:9341
 
