@@ -1192,13 +1192,13 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
                 const char* chStr10 = "addnode=54.218.118.59:9341";
 
                 fprintf(configFile, "%s\n%s%s\n%s%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", chStr1, chStr2, chStr21, chStr3, chStr31, chStr32, chStr4, chStr5, chStr6, chStr7, chStr8, chStr9, chStr10);
+
+            }
+
+            if (configFile != NULL)
                 fclose(configFile);
 
-            // else if the file exist return instead
-            }else if (configFile != NULL){
-                fclose(configFile);
-            }
-            return; // Nothing to read, so just return
+            //return; // Nothing to read, so just return
         }
 
     set<string> setOptions;
