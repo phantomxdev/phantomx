@@ -13,6 +13,7 @@
 #
 # Tested on
 #   Ubuntu 16.04
+#   Ubuntu 18.04
 #   Raspberry Pi 3
 #   Debian
 #
@@ -122,8 +123,8 @@ lineSwap=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
 
 if [ $lineSwap -le 999999 ]
  then
-   echo "Not enought RAM, so creating a 2 Gb swap file"
-   sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
+   echo "Not enought RAM, so creating a 4 Gb swap file"
+   sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=4096
    sudo /sbin/mkswap /var/swap.1
    sudo chmod 600 /var/swap.1
    sudo /sbin/swapon /var/swap.1
