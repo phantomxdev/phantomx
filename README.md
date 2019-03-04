@@ -92,8 +92,8 @@ First of all we need to install PNX Wallet, so install prerequisites:
 
     #If you have less than 2GB ram on your VPS or PC you must to create
     #a swap file to avoid errors during compile step
-    #(ONLY RUN THIS COMMANDS IF YOU HAVE LESS THAN 2GB RAM)
-    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
+    #(ONLY RUN THIS COMMANDS IF YOU HAVE LESS THAN 4GB RAM)
+    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=4096
     sudo /sbin/mkswap /var/swap.1
     sudo chmod 600 /var/swap.1
     sudo /sbin/swapon /var/swap.1
