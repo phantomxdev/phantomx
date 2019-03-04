@@ -5,7 +5,7 @@
 # Second Updated by: @kiolx
 # Forked from: https://github.com/phantomxdev/phantomx
 # Web: http://www.phantomx.co
-# Version: 1.8
+# Version: 1.9
 #
 # Usage:
 #   This script is for auto-compile the PNX wallet taken from github official
@@ -115,13 +115,13 @@ keymatch1="debian"
 ###############################################################################
 
 outputColorYellow "############################################################"
-outputColorYellow "###     Creating a Swap File for < 1Gb Ram servers       ###"
+outputColorYellow "###     Creating a Swap File for < 2Gb Ram servers       ###"
 outputColorYellow "############################################################"
 
 lineSwap=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
 #echo "$line"
 
-if [ $lineSwap -le 999999 ]
+if [ $lineSwap -le 1999998 ]
  then
    echo "Not enought RAM, so creating a 4 Gb swap file"
    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=4096
